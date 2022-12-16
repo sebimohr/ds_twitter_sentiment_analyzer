@@ -16,7 +16,7 @@
 
 \chapter{Loading in of data}
 
-The data will be loaded through the Twitter API. The easiest way for this is to use the Python library \code{Tweepy} that provides different methods to access the Twitter API. The first step here will be the input of a specific events hashtag, for example the current Fifa World Cup 2022 uses the official Hashtag \requirement{\#FIFAWorldCup}. After the tag has been put into the application, it will request a specific number of tweets for this event from the Twitter API. Currently I go with 50 tweets, but this number can be also set higher or lower, depending on preferences on how detailed the analyzed data should be. \\
+The data will be loaded through the Twitter API. The easiest way for this is to use the Python library \code{Tweepy} that provides different methods to access the Twitter API. The first step here will be the input of a specific events hashtag. After the tag has been put into the application, it will request a specific number of tweets for this event from the Twitter API. Currently I go with 50 tweets, but this number can be also set higher or lower, depending on preferences on how detailed the analyzed data should be. \\
 
 To load the data, a \requirement{URL} has to be defined, which accesses the API at a specific endpoint. The URL also defines the query parameters, such as how many tweets are requested, which hashtags should be included in each tweet or which timeframe the tweet has to be created in. In \code{Tweepy} this process is done by creating a \code{Tweepy} Client, that includes the Bearer Token, through which the Twitter API can authenticate the current used dev-User. The defined query parameters then get put into the \code{client.search\_recent\_tweets(...)} method, that then starts an API call and retrieves all matching tweets. This method also takes in the definition of which fields of the tweets are necessary and will be be included in the result. The data will then be stored in a CSV file to make it easily accessable in a later session.
 
@@ -36,6 +36,16 @@ After the user opens the application, they can choose to either start a new quer
 
 
 \chapter{Solution Examples}
-At the time of this submission the application is not yet up and running. So the following examples will just be some mockups, on how the data will be displayed to the user after it was analyzed. 
+
+The goal is to give the user a feel on how the public opinion about a specific event is. For example if it's negative, the user can see which hashtags are trending alongside the event and what the peoples opinion about it is, by looking at top contributors in the requested data set. \\
+
+To make the sentiment analysis easier readable for the user a bar will be displayed on top of the UI that shows the distribution between positive, neutral and negative tweets. \code{Textblob} also analyzes the polarity of the tweets which can be shown as well. The top users and hashtags will also be marked with a clearly visible color that indicates the sentiment of the respective tweets.
+
+\begin{figure}[h]
+    \centering
+    \caption{Mockup of the UI showing the Sentiment Analysis}
+    \includegraphics[width=0.6\textwidth]{media/mockup_ui.png}
+\end{figure}
+
 
 \end{document}
