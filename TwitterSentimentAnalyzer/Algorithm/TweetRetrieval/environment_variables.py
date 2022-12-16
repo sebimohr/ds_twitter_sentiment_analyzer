@@ -2,11 +2,10 @@ from dotenv import load_dotenv
 import os
 
 
-def load_dot_env():
+def get_bearer_token():
+    # loads environment variable from .env-file
     load_dotenv()
 
-
-def get_bearer_token():
-    load_dot_env()
+    # loads twitter_bearer_token value from environment variables 
     bearer_token = os.environ.get('TWITTER_BEARER_TOKEN')
     return bearer_token
