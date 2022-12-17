@@ -9,12 +9,14 @@ def build_tweepy_client(bearer_token: string):
 
 
 def get_tweets_by_hashtag(client: tweepy.Client, hashtag: string, max_results=50):
+    # normalize hashtag before sending request to the api
     hashtag.strip()
     if hashtag[0] != '#':
         hashtag = "#" + hashtag
 
-    query = f'{hashtag} -is:retweet lang:en'
-
-    tweets = client.search_recent_tweets(query=query, max_results=max_results)
+    query = f'{hashtag} lang:en'
+    tweets = client.search_recent_tweets(query=query,
+                                         tweet_fields=['context_annotations', 'created_at'],
+                                         max_results=max_results)
 
     return tweets
