@@ -1,18 +1,15 @@
 from textblob import TextBlob, blob
 
+from Algorithm.DataClasses.tweet import Tweet
+
 
 class SentimentAnalyzer:
-    tweets: []
-    
-    def __init__(self, tweets_from_api: []):
+    tweets: [Tweet]
+
+    def __init__(self, tweets_from_api: [Tweet]):
         self.tweets = tweets_from_api
 
     def analyseSentimentOfTweetList(self):
-        positive = 0
-        negative = 0
-        neutral = 0
-        polarity = 0
-        tweet_list = []
         neutral_list = []
         negative_list = []
         positive_list = []
@@ -20,61 +17,44 @@ class SentimentAnalyzer:
         tweets_count = len(self.tweets)
 
         for tweet in self.tweets:
-            tweet_list.append(tweet.text)
-            blob_analyzed = TextBlob(tweet.text)
+            blob_analyzed = TextBlob(tweet.content)
 
-            sent = blob_analyzed.sentiment
             # analyzed polarity of sentiment: -1 = negative, +1 = positive
-            polarity = getPolarity(blob_analyzed)
-            polarity_rating = ratePolarity(polarity)
+            tweet.sentiment.sentiment_score = getPolarity(blob_analyzed)
+            tweet_polarity_rating = ratePolarity(tweet)
+            tweet.sentiment.sentiment_rating_value = tweet_polarity_rating
 
-            '''score = SentimentIntensityAnalyzer().polarity_scores(tweet.text)
-            neg = score['neg']
-            neu = score['neu']
-            pos = score['pos']
-            comp = score['compound']
-    
-            polarity += analysis.sentiment.polarity
-    
-            if neg > pos:
-                negative_list.append(tweet.text)
-                negative += 1
-    
-            elif pos > neg:
-                positive_list.append(tweet.text)
-                positive += 1
-    
-            elif pos == neg:
-                neutral_list.append(tweet.text)
-                neutral += 1
-    
-            positive = percentage_of_tweets(positive, tweets_count)
-            negative = percentage_of_tweets(negative, tweets_count)
-            neutral = percentage_of_tweets(neutral, tweets_count)
-            polarity = percentage_of_tweets(polarity, tweets_count)'''
+            if tweet_polarity_rating > 0:
+                negative_list.append(tweet)
+            elif tweet_polarity_rating > 0:
+                positive_list.append(tweet)
+            else:
+                neutral_list.append(tweet)
 
-        print(f"Positive tweets percentage: {positive}\n"
-              f"Negative tweets percentage: {negative}\n"
-              f"Neutral tweets percentage:{neutral}")
+        print(f"Positive tweets percentage: {percentageOfTweets(tweets_count, len(positive_list))}%\n"
+              f"Negative tweets percentage: {percentageOfTweets(tweets_count, len(negative_list))}%\n"
+              f"Neutral tweets percentage:{percentageOfTweets(tweets_count, len(neutral_list))}%")
 
 
 def getPolarity(text: blob.BaseBlob):
     return text.polarity
 
 
-def ratePolarity(polarity_score: float):
+def ratePolarity(tweet: Tweet):
+    polarity_score = tweet.sentiment.sentiment_score
+
     if polarity_score < 0.5:
-        return "Negative"
-    elif polarity_score < 0.2:
-        return "rather Negative"
+        return -2
+    elif polarity_score < 0:
+        return -1
     elif polarity_score > 0.5:
-        return "Positive"
-    elif polarity_score > 0.2:
-        return "rather Positive"
+        return 2
+    elif polarity_score > 0:
+        return 1
     else:
-        return "Neutral"
+        return 0
 
 
-def percentageOfTweets(tweets_count: float, list_size: float):
-    percentage = tweets_count / list_size * 100
+def percentageOfTweets(all_tweets_size: float, list_size: float):
+    percentage = list_size / all_tweets_size * 100
     return percentage
