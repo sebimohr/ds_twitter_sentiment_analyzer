@@ -10,11 +10,11 @@ class Main:
     tweepyClient = TweepyClient(EnvironmentVariablesHelper.getBearerToken())
     tweets = tweepyClient.getTweetsByHashtag("FIFAWorldCup", 50)
 
-    print(f"Retrieved {len(tweets.data)} Tweets")
+    print(f"Retrieved {len(tweets)} Tweets")
 
     # analyze sentiment of tweets
-    sentimentAnalyzer = SentimentAnalyzer(tweets.data)
-    # sentimentAnalyzer.analyseSentimentOfTweetList()
+    sentimentAnalyzer = SentimentAnalyzer(tweets)
+    sentimentAnalyzer.analyseSentimentOfTweetList()
 
     # ending the program
     print("\nClosing the program")
