@@ -1,14 +1,20 @@
-from Algorithm.SentimentAnalysis.sentiment_analysis import analyseSentimentOfTweetList
-from Algorithm.TweetRetrieval.environment_variables import getBearerToken
-from Algorithm.TweetRetrieval.twitter_api_abstraction import buildTweepyClient, getTweetsByHashtag
+from Algorithm.SentimentAnalysis.sentiment_analyzer import SentimentAnalyzer
+from Algorithm.TweetRetrieval.environment_variables import EnvironmentVariablesHelper
+from Algorithm.TweetRetrieval.twitter_api_abstraction import TweepyClient
 
-print("Retrieving tweets from Twitter API, this may take a moment")
 
-client = buildTweepyClient(getBearerToken())
-tweets = getTweetsByHashtag(client, "football", 50)
+class Main:
+    print("Retrieving tweets from Twitter API, this may take a moment")
 
-print(f"Retrieved {len(tweets.data)} Tweets")
+    # get tweets from twitter api
+    tweepyClient = TweepyClient(EnvironmentVariablesHelper.getBearerToken())
+    tweets = tweepyClient.getTweetsByHashtag("FIFAWorldCup", 50)
 
-analyseSentimentOfTweetList(tweets.data)
+    print(f"Retrieved {len(tweets.data)} Tweets")
 
-print("\nClosing the program")
+    # analyze sentiment of tweets
+    sentimentAnalyzer = SentimentAnalyzer(tweets.data)
+    # sentimentAnalyzer.analyseSentimentOfTweetList()
+
+    # ending the program
+    print("\nClosing the program")
