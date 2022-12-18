@@ -1,7 +1,6 @@
-import string
+import os
 
 from dotenv import load_dotenv
-import os
 
 
 class EnvironmentVariablesHelper:
@@ -12,5 +11,5 @@ class EnvironmentVariablesHelper:
     @staticmethod
     def getBearerToken():
         # loads twitter_bearer_token value from environment variables 
-        bearer_token: string = os.environ.get('TWITTER_BEARER_TOKEN')
+        bearer_token: str = os.environ.get('TWITTER_BEARER_TOKEN')
         return bearer_token
