@@ -1,7 +1,7 @@
 import tweepy
 
 from Algorithm.TwitterApiAbstractions.data_parser import DataParser
-from Algorithm.TwitterApiAbstractions.validator import StringValidator
+from Algorithm.TwitterApiAbstractions.string_validator import StringValidator
 from Algorithm.environment_variables import EnvironmentVariablesHelper
 
 
