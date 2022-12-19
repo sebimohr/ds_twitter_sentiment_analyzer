@@ -9,7 +9,7 @@ class SentimentAnalyzer:
     def __init__(self, tweets_from_api: [Tweet]):
         self.tweets = tweets_from_api
 
-    def analyseSentimentOfTweetList(self):
+    def AnalyseSentimentOfTweetList(self):
         neutral_list = []
         negative_list = []
         positive_list = []
@@ -20,8 +20,8 @@ class SentimentAnalyzer:
             blob_analyzed = TextBlob(tweet.content)
 
             # analyzed polarity of sentiment: -1 = negative, +1 = positive
-            tweet.sentiment.sentiment_score = getPolarity(blob_analyzed)
-            tweet_polarity_rating = ratePolarity(tweet)
+            tweet.sentiment.sentiment_score = GetPolarity(blob_analyzed)
+            tweet_polarity_rating = RatePolarity(tweet)
             tweet.sentiment.sentiment_rating_value = tweet_polarity_rating
 
             if tweet_polarity_rating > 0:
@@ -31,16 +31,16 @@ class SentimentAnalyzer:
             else:
                 neutral_list.append(tweet)
 
-        print(f"Positive tweets percentage: {percentageOfTweets(tweets_count, len(positive_list))}%\n"
-              f"Negative tweets percentage: {percentageOfTweets(tweets_count, len(negative_list))}%\n"
-              f"Neutral tweets percentage:{percentageOfTweets(tweets_count, len(neutral_list))}%")
+        print(f"Positive tweets percentage: {PercentageOfTweets(tweets_count, len(positive_list))}%\n"
+              f"Negative tweets percentage: {PercentageOfTweets(tweets_count, len(negative_list))}%\n"
+              f"Neutral tweets percentage:{PercentageOfTweets(tweets_count, len(neutral_list))}%")
 
 
-def getPolarity(text: blob.BaseBlob):
+def GetPolarity(text: blob.BaseBlob):
     return text.polarity
 
 
-def ratePolarity(tweet: Tweet):
+def RatePolarity(tweet: Tweet):
     polarity_score = tweet.sentiment.sentiment_score
 
     if polarity_score < 0.5:
@@ -55,6 +55,6 @@ def ratePolarity(tweet: Tweet):
         return 0
 
 
-def percentageOfTweets(all_tweets_size: float, list_size: float):
+def PercentageOfTweets(all_tweets_size: float, list_size: float):
     percentage = list_size / all_tweets_size * 100
     return percentage
