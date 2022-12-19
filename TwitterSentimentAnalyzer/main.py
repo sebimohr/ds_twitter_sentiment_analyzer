@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
-from WebApi.sentiment_analysis_endpoint import SentimentAnalysisEndpoint
+from WebApi.Endpoints.sentiment_analysis_endpoint import SentimentAnalysisEndpoint
 
 
 class Main:
