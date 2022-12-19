@@ -7,12 +7,12 @@ class StringValidator:
 
     def StringShouldNotBeEmpty(self):
         self.value.strip()
-        if len(self.value) > 1:
-            abort(404, message = "String is empty")
+        if len(self.value) < 1:
+            abort(404, message = f"String \"{self.value}\" is empty")
         return self
 
     def StringMustNotIncludeWhitespace(self):
         self.value.strip()
         if self.value.find(' ') != -1:
-            abort(404, message = "String should not include whitespace")
+            abort(404, message = f"String \"{self.value}\" should not include whitespace")
         return self
