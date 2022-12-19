@@ -9,7 +9,7 @@ class EnvironmentVariablesHelper:
         load_dotenv()
 
     @staticmethod
-    def getBearerToken():
+    def GetBearerToken():
         # loads twitter_bearer_token value from environment variables 
         bearer_token: str = os.environ.get('TWITTER_BEARER_TOKEN')
         return bearer_token
