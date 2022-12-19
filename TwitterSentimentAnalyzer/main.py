@@ -1,20 +1,27 @@
-from Algorithm.SentimentAnalysis.sentiment_analyzer import SentimentAnalyzer
-from Algorithm.TweetRetrieval.environment_variables import EnvironmentVariablesHelper
-from Algorithm.TweetRetrieval.twitter_api_abstraction import TweepyClient
+from flask import Flask
+from flask_restful import Api
+
+from WebApi.sentiment_analysis_endpoint import SentimentAnalysisEndpoint
 
 
 class Main:
-    print("Retrieving tweets from Twitter API, this may take a moment")
+    app: Flask
+    api: Api
 
-    # get tweets from twitter api
-    tweepyClient = TweepyClient(EnvironmentVariablesHelper.getBearerToken())
-    tweets = tweepyClient.getTweetsByHashtag("FIFAWorldCup", 50)
+    def __init__(self):
+        self.app = Flask(__name__)
+        self.api = Api(self.app)
 
-    print(f"Retrieved {len(tweets)} Tweets")
+    def RegisterApiEndpoints(self):
+        self.api.add_resource(SentimentAnalysisEndpoint, '/api/sentiment')
+        return self
 
-    # analyze sentiment of tweets
-    sentimentAnalyzer = SentimentAnalyzer(tweets)
-    sentimentAnalyzer.analyseSentimentOfTweetList()
+    def RunApi(self):
+        print("Starting TwitterSentimentAnalyzer")
+        self.app.run(debug = True)
+        return self
 
-    # ending the program
-    print("\nClosing the program")
+
+if __name__ == '__main__':
+    main_api = Main()
+    main_api.RegisterApiEndpoints().RunApi()
