@@ -7,16 +7,17 @@ from Algorithm.TwitterApiAbstractions.tweepy_client import TweepyClient
 
 class SentimentAnalysisEndpoint(Resource):
     tweepy_client: TweepyClient
+    hashtag: str
 
-    def __init__(self):
+    def __init__(self, hashtag: str):
         self.tweepy_client = TweepyClient()
+        self.hashtag = hashtag
 
     def get(self):
-        print("Retrieving tweets from Twitter API, this may take a moment")
+        print("Retrieving tweets from Twitter API")
 
         # get tweets from twitter api
-        tweets = self.tweepy_client.GetTweetsByHashtag("FIFAWorldCup", 50)
-
+        tweets = self.tweepy_client.GetTweetsByHashtag(self.hashtag, 50)
         print(f"Retrieved {len(tweets)} Tweets")
 
         # analyze sentiment of tweets
