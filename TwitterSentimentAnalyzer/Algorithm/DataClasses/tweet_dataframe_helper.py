@@ -12,5 +12,14 @@ class TweetDataframeHelper:
     def ToDataFrame(self) -> DataFrame:
         return DataFrame.from_dict(self.tweet_list)
 
-    def FromDataFrame(self, data: DataFrame):
-        return data.to_dict(into = self.tweet_list)
+    def FromDataFrame(self, data: DataFrame) -> [Tweet]:
+        if len(data) < 1:
+            return self.tweet_list
+
+        for tweet in data.to_dict(orient = 'index').values():
+            self.tweet_list.append(Tweet(tweet["id"],
+                                         tweet["content"],
+                                         tweet["metrics"],
+                                         tweet["sentiment"]))
+
+        return self.tweet_list

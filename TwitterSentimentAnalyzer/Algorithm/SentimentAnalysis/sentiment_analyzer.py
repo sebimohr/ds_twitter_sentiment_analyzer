@@ -35,6 +35,7 @@ class SentimentAnalyzer:
               f"Negative tweets percentage: {PercentageOfTweets(tweets_count, len(negative_list))}%\n"
               f"Neutral tweets percentage:{PercentageOfTweets(tweets_count, len(neutral_list))}%")
 
+        return self.tweets
 
 def GetPolarity(text: blob.BaseBlob):
     return text.polarity

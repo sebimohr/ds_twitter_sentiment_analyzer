@@ -20,9 +20,12 @@ class CsvHelper:
                                   f"{datetime.now().strftime('%y-%m-%d_%H-%M-%S')}_{self.default_name}"))
 
     def GetDataFromCsv(self) -> DataFrame:
-        if Path.exists(self.cache_for_hashtag):
+        if self.CachedDataDoesExist():
             for files in self.cache_for_hashtag.iterdir():
                 if files.name.endswith(self.default_name):
-                    return read_csv(files.name)
+                    return read_csv(files)
 
         return DataFrame()
+
+    def CachedDataDoesExist(self) -> bool:
+        return Path.exists(self.cache_for_hashtag)
