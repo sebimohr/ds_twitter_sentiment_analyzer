@@ -10,9 +10,11 @@ class TweetDataframeHelper:
         self.tweet_list = tweet_list
 
     def ToDataFrame(self) -> DataFrame:
+        """ convert tweet_list into DataFrame object """
         return DataFrame.from_dict(self.tweet_list)
 
     def FromDataFrame(self, data: DataFrame) -> [Tweet]:
+        """ converts dataFrame into tweet object """
         if len(data) < 1:
             return self.tweet_list
 

@@ -1,6 +1,8 @@
 import tweepy
 
 from Algorithm.DataClasses.data_parser import DataParser
+from Algorithm.DataClasses.tweet import Tweet
+from Algorithm.DataClasses.user import User
 from Algorithm.TwitterApiAbstractions.string_validator import StringValidator
 from Algorithm.environment_variables import EnvironmentVariablesHelper
 
@@ -11,7 +13,8 @@ class TweepyClient:
     def __init__(self):
         self.client = tweepy.Client(EnvironmentVariablesHelper.GetBearerToken())
 
-    def GetTweetsByHashtag(self, hashtag: str, max_results = 50):
+    def GetTweetsByHashtag(self, hashtag: str, max_results = 50) -> [Tweet]:
+        """ retrieves tweets from Twitter api """
         # validate input before accessing api
         validator = StringValidator(hashtag)
         validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()
@@ -29,7 +32,8 @@ class TweepyClient:
 
         return DataParser.ParseTweetsFromApiToTweetDataClassList(tweets)
 
-    def GetFollowersByUserId(self, user_id: str):
+    def GetFollowersByUserId(self, user_id: str) -> [User]:
+        """ loads all followers of the user with the specified user_id """
         # validate input before accessing api
         validator = StringValidator(user_id)
         validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()

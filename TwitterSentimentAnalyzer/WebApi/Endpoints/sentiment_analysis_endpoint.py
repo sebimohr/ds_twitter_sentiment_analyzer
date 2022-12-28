@@ -2,15 +2,16 @@ from flask import jsonify, request
 from flask_restful import Resource
 from pandas import DataFrame
 
+from Algorithm.DataClasses.csv_helper import CsvHelper
 from Algorithm.DataClasses.tweet import Tweet
 from Algorithm.DataClasses.tweet_dataframe_helper import TweetDataframeHelper
 from Algorithm.SentimentAnalysis.sentiment_analyzer import SentimentAnalyzer
 from Algorithm.TwitterApiAbstractions.tweepy_client import TweepyClient
-from Algorithm.DataClasses.csv_helper import CsvHelper
 
 
 class SentimentAnalysisEndpoint(Resource):
     tweepy_client: TweepyClient
+    max_results: int = 50
 
     def __init__(self):
         self.tweepy_client = TweepyClient()
@@ -39,8 +40,9 @@ class SentimentAnalysisEndpoint(Resource):
         return jsonify({'tweets': tweets})
 
     def CachedDataIsNotUsed(self, hashtag: str) -> [Tweet]:
+        """ call this method when cached data is not used and new data has to be retrieved from Twitter """
         # when getting new data, retrieve tweets, save them in csv, analyze sentiment
-        tweets = self.tweepy_client.GetTweetsByHashtag(hashtag, 50)
+        tweets = self.tweepy_client.GetTweetsByHashtag(hashtag, self.max_results)
 
         # get tweets from twitter api
         print(f"Retrieved {len(tweets)} Tweets")
