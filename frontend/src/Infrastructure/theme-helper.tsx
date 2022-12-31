@@ -1,4 +1,4 @@
-import { ChildrenProps } from "./Infrastructure/children-props";
+import { ChildrenProps } from "./children-props";
 import { createTheme, ThemeProvider } from "@mui/material";
 
 const lightTheme = createTheme({

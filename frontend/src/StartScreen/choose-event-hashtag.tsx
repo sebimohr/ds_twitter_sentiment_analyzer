@@ -10,17 +10,17 @@ import {
 
 export default function ChooseEventHashtag() {
     const [hashtag, setHashtag] = React.useState<string>("");
-    const [dataSource, setDataSource] = React.useState<string>('new_query')
+    const [useCachedData, setUseCachedData] = React.useState<boolean>(true)
 
     const handleHashtagChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHashtag(event.target.value)
     };
 
-    const handleDataSourceToggle = (
+    const handleUseCachedDataChanged = (
         event: React.MouseEvent<HTMLElement>,
-        newDataSource: string
+        newDataSource: boolean
     ) => {
-        setDataSource(newDataSource)
+        setUseCachedData(newDataSource)
     }
 
     return (
@@ -36,6 +36,7 @@ export default function ChooseEventHashtag() {
                     id="outlined-basic"
                     label="Hashtag"
                     InputProps={{
+                        // for permanent hashtag at the beginning of the textfield
                         startAdornment: <InputAdornment position="start">#</InputAdornment>
                     }}
                     variant="outlined"
@@ -46,24 +47,24 @@ export default function ChooseEventHashtag() {
                         marginTop: 2,
                         marginBottom: 2
                     }}
-                ></TextField>
+                />
                 <ToggleButtonGroup
-                    value={dataSource}
+                    value={useCachedData}
                     exclusive
-                    onChange={handleDataSourceToggle}
+                    onChange={handleUseCachedDataChanged}
                     aria-label="data source"
                     sx={{
                         marginBottom: 2
                     }}>
                     <ToggleButton
-                        value="cached"
+                        value={true}
                         sx={{
                             width: 150
                         }}>
                         Cached
                     </ToggleButton>
                     <ToggleButton
-                        value="new_query"
+                        value={false}
                         sx={{
                             width: 150
                         }}>

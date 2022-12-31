@@ -1,7 +1,7 @@
 import './App.css';
 import React from "react";
 import ChooseEventHashtag from "./StartScreen/choose-event-hashtag";
-import ThemeHelper from "./theme-helper";
+import ThemeHelper from "./Infrastructure/theme-helper";
 
 export default function App() {
     return (
