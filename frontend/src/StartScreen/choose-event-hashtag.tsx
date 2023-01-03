@@ -7,14 +7,18 @@ import {
     ToggleButtonGroup,
     ToggleButton, Typography
 } from "@mui/material";
+import { HashtagProps } from "./hashtag-props";
 
-export default function ChooseEventHashtag() {
-    const [hashtag, setHashtag] = React.useState<string>("");
-    const [useCachedData, setUseCachedData] = React.useState<boolean>(true)
+export default function ChooseEventHashtag(props: HashtagProps) {
+    const [hashtag, setHashtag] = [props.hashtag, props.setHashtag];
+    const [useCachedData, setUseCachedData] = React.useState<boolean>(true);
+
+    // TODO: isShown must be changed on form submission
+    const [isShown, setIsShown] = [props.isShown, props.changeIsShown];
 
     const handleHashtagChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHashtag(event.target.value)
-    };
+    }
 
     const handleUseCachedDataChanged = (
         event: React.MouseEvent<HTMLElement>,
@@ -25,7 +29,7 @@ export default function ChooseEventHashtag() {
 
     return (
         <div>
-            <Stack>
+            isShown && <Stack>
                 <Typography
                     sx={{
                         width: 300
