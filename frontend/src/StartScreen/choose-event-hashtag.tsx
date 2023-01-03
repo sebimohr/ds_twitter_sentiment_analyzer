@@ -13,9 +13,6 @@ export default function ChooseEventHashtag(props: HashtagProps) {
     const [hashtag, setHashtag] = [props.hashtag, props.setHashtag];
     const [useCachedData, setUseCachedData] = React.useState<boolean>(true);
 
-    // TODO: isShown must be changed on form submission
-    const [isShown, setIsShown] = [props.isShown, props.changeIsShown];
-
     const handleHashtagChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHashtag(event.target.value)
     }
@@ -27,16 +24,18 @@ export default function ChooseEventHashtag(props: HashtagProps) {
         setUseCachedData(newDataSource)
     }
 
+    const handleSubmitButtonClicked = () => {
+        props.changeIsShown();
+    }
+
     return (
         <div>
-            isShown && <Stack>
-                <Typography
-                    sx={{
-                        width: 300
-                    }}>
+            {props.isShown && <Stack sx={{width: 300}}>
+                <Typography>
                     Please enter the hashtag of the event you want to search for.
                 </Typography>
                 <TextField
+                    fullWidth
                     id="outlined-basic"
                     label="Hashtag"
                     InputProps={{
@@ -47,7 +46,6 @@ export default function ChooseEventHashtag(props: HashtagProps) {
                     value={hashtag}
                     onChange={handleHashtagChanged}
                     sx={{
-                        width: 300,
                         marginTop: 2,
                         marginBottom: 2
                     }}
@@ -77,10 +75,11 @@ export default function ChooseEventHashtag(props: HashtagProps) {
                 </ToggleButtonGroup>
                 <Button
                     variant="outlined"
+                    onClick={handleSubmitButtonClicked}
                     sx={{
                         width: 300
-                    }}>Absenden</Button>
-            </Stack>
+                    }}>Submit</Button>
+            </Stack>}
         </div>
     )
 }

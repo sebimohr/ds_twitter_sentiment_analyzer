@@ -10,6 +10,11 @@ export default function App() {
 
     const [sentimentScreenIsShown, setSentimentScreenIsShown] = React.useState<boolean>(false);
 
+    const hashtagScreenSubmission = () => {
+        setHashtagScreenIsShown(false);
+        setSentimentScreenIsShown(true);
+    }
+
     return (
         <div className="App">
             <ThemeHelper>
@@ -17,7 +22,7 @@ export default function App() {
                     hashtag={hashtag}
                     setHashtag={setHashtag}
                     isShown={hashtagScreenIsShown}
-                    changeIsShown={setHashtagScreenIsShown}/>
+                    changeIsShown={hashtagScreenSubmission}/>
                 <SentimentScreen
                     hashtag={hashtag}
                     isShown={sentimentScreenIsShown}
