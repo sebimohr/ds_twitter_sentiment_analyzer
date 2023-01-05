@@ -11,7 +11,7 @@ import { HashtagProps } from "./hashtag-props";
 
 export default function ChooseEventHashtag(props: HashtagProps) {
     const [hashtag, setHashtag] = [props.hashtag, props.setHashtag];
-    const [useCachedData, setUseCachedData] = React.useState<boolean>(true);
+    const [useCachedData, setUseCachedData] = [props.useCachedData, props.setUseCachedData];
 
     const handleHashtagChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHashtag(event.target.value)
@@ -19,9 +19,9 @@ export default function ChooseEventHashtag(props: HashtagProps) {
 
     const handleUseCachedDataChanged = (
         event: React.MouseEvent<HTMLElement>,
-        newDataSource: boolean
+        useCache: boolean
     ) => {
-        setUseCachedData(newDataSource)
+        setUseCachedData(useCache)
     }
 
     const handleSubmitButtonClicked = () => {
@@ -30,10 +30,10 @@ export default function ChooseEventHashtag(props: HashtagProps) {
 
     return (
         <div>
-            {props.isShown && <Stack sx={{width: 300}}>
-                <Typography>
+            {props.isShown && <Stack>
+                <p style={{textAlign: "center"}}>
                     Please enter the hashtag of the event you want to search for.
-                </Typography>
+                </p>
                 <TextField
                     fullWidth
                     id="outlined-basic"
@@ -61,14 +61,14 @@ export default function ChooseEventHashtag(props: HashtagProps) {
                     <ToggleButton
                         value={true}
                         sx={{
-                            width: 150
+                            width: '50%'
                         }}>
                         Cached
                     </ToggleButton>
                     <ToggleButton
                         value={false}
                         sx={{
-                            width: 150
+                            width: '50%'
                         }}>
                         New Query
                     </ToggleButton>
@@ -77,7 +77,7 @@ export default function ChooseEventHashtag(props: HashtagProps) {
                     variant="outlined"
                     onClick={handleSubmitButtonClicked}
                     sx={{
-                        width: 300
+                        width: '100%'
                     }}>Submit</Button>
             </Stack>}
         </div>
