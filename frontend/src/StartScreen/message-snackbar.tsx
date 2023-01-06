@@ -1,11 +1,11 @@
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
 
-export default function ErrorSnackbar(props: {
+export default function MessageSnackbar(props: {
     openErrorSnackbar: boolean
     changeOpenErrorSnackbar: Function
     errorMessage: string
-
+    isFatalError: boolean
 }) {
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -29,7 +29,7 @@ export default function ErrorSnackbar(props: {
             >
                 <Alert
                     onClose={handleClose}
-                    severity="error"
+                    severity={props.isFatalError ? "error" : "info"}
                 >{props.errorMessage}</Alert>
             </Snackbar>
         </div>
