@@ -2,41 +2,23 @@ import { InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 
 import { SentimentProps } from "./sentiment-props";
-import CanvasJSReact from "../CanvasJsLibrary/canvasjs.react";
+import { CanvasJSChart, CanvasSettings } from "./canvas-settings";
 
-const CanvasJS = CanvasJSReact.CanvasJS;
-CanvasJS.addColorSet("customColorSet", ["#559E55", "#8F8F88", "#BF5250"])
+const Chart = CanvasJSChart;
 
 export default function SentimentScreen(props: SentimentProps) {
     const hashtag = props.hashtag;
-    // TODO: isShown must be bound to a function
-    const setIsShown = props.changeIsShown;
+    const tweetsList = props.tweetsList;
+    let [positiveCount, neutralCount, negativeCount] = [0, 0, 0]
 
-    const [positiveCount, neutralCount, negativeCount] = [5, 13, 32]
-
-    const toolTip = (count: number): string => {
-        return count.toString() + " Tweets";
-    }
-
-    // import canvasJSChart from canvasjs library
-    const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-    CanvasJS.addTheme()
-    const canvasJsOptions = {
-        animationEnabled: true,
-        colorSet: "customColorSet",
-        data: [{
-            type: "pie",
-            // toolTipContent: "{sentiment}: {percentage}%",
-            indexLabel: "{name}: {y}%",
-            // indexLabelPlacement: "inside",
-            startAngle: -90,
-            dataPoints: [
-                {name: "Positive", y: 10, toolTipContent: toolTip(positiveCount)},
-                {name: "Neutral", y: 26, toolTipContent: toolTip(neutralCount)},
-                {name: "Negative", y: 64, toolTipContent: toolTip(negativeCount)}
-            ]
-        }]
-    }
+    tweetsList.forEach(tweet => {
+        if (tweet.sentiment.sentiment_rating_value > 0)
+            positiveCount++;
+        else if (tweet.sentiment.sentiment_rating_value < 0) {
+            negativeCount++;
+        } else
+            neutralCount++;
+    })
 
     return (
         <div>
@@ -59,7 +41,7 @@ export default function SentimentScreen(props: SentimentProps) {
                     <Typography>
                         Sentiment Analysis
                     </Typography>
-                    <CanvasJSChart options={canvasJsOptions}/>
+                    <Chart options={CanvasSettings(positiveCount, neutralCount, negativeCount)}/>
                 </Stack>
             </Stack>}
         </div>
