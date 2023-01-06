@@ -1,9 +1,5 @@
 import CanvasJSReact from "../CanvasJsLibrary/canvasjs.react";
 
-const toolTip = (count: number): string => {
-    return count.toString() + " Tweets";
-}
-
 const percentage = (count: number, total_count: number): string => {
     let percentageOfAllTweets = count * 100 / total_count;
     return percentageOfAllTweets.toString();
@@ -26,19 +22,19 @@ export const CanvasSettings = (positiveCount: number, neutralCount: number, nega
                 {
                     name: "Positive",
                     y: positiveCount,
-                    toolTipContent: "{y} Tweets",
+                    toolTipContent: "Positive: {y} Tweets",
                     label: percentage(positiveCount, total_count)
                 },
                 {
                     name: "Neutral",
                     y: neutralCount,
-                    toolTipContent: toolTip(neutralCount),
+                    toolTipContent: "Neutral: {y} Tweets",
                     label: percentage(neutralCount, total_count)
                 },
                 {
                     name: "Negative",
                     y: negativeCount,
-                    toolTipContent: toolTip(negativeCount),
+                    toolTipContent: "Negative: {y} Tweets",
                     label: percentage(negativeCount, total_count)
                 }
             ]
