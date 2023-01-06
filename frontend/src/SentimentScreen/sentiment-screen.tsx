@@ -3,6 +3,8 @@ import React from "react";
 
 import { SentimentProps } from "./sentiment-props";
 import { CanvasJSChart, CanvasSettings } from "./canvas-settings";
+import SentimentScreenList from "./sentiment-screen-list";
+import { SentimentScreenListItem } from "./sentiment-screen-list-item";
 
 const Chart = CanvasJSChart;
 
@@ -19,6 +21,14 @@ export default function SentimentScreen(props: SentimentProps) {
         } else
             neutralCount++;
     })
+
+    const test_list : SentimentScreenListItem[] = [
+        {"id": 1, "main_text": "oben text", "sub_text": "unten text", "sentiment": -0.5},
+        {"id": 2, "main_text": "oben2 text", "sub_text": "unten2 text", "sentiment": -1},
+        {"id": 3, "main_text": "oben3 text", "sub_text": "unten3 text", "sentiment": 1},
+        {"id": 4, "main_text": "oben4 text", "sub_text": "unten4 text", "sentiment": 0.5},
+        {"id": 5, "main_text": "oben5 text", "sub_text": "unten5 text", "sentiment": 0},
+    ]
 
     return (
         <div>
@@ -42,6 +52,10 @@ export default function SentimentScreen(props: SentimentProps) {
                         Sentiment Analysis
                     </Typography>
                     <Chart options={CanvasSettings(positiveCount, neutralCount, negativeCount)}/>
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <SentimentScreenList isHashtagList={true} listToShow={test_list}/>
+                    <SentimentScreenList isHashtagList={false} listToShow={test_list}/>
                 </Stack>
             </Stack>}
         </div>
