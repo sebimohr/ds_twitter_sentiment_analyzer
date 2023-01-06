@@ -30,10 +30,10 @@ export default function ChooseEventHashtag(props: HashtagProps) {
 
     return (
         <div>
-            {props.isShown && <Stack>
-                <p style={{textAlign: "center"}}>
+            {props.isShown && <Stack sx={{width: 500}}>
+                <Typography variant="h6" gutterBottom style={{textAlign: "center"}}>
                     Please enter the hashtag of the event you want to search for.
-                </p>
+                </Typography>
                 <TextField
                     fullWidth
                     id="outlined-basic"
