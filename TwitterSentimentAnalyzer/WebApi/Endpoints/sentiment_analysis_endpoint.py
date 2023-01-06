@@ -20,12 +20,15 @@ class SentimentAnalysisEndpoint(Resource):
     def get(self):
         print("Retrieving tweets from Twitter API")
 
-        # get query parameter hashtag
-        hashtag = StringValidator(request.args["hashtag"]) \
+        # get query parameters and validate them
+        hashtag = request.args["hashtag"]
+        StringValidator(hashtag) \
             .StringShouldNotBeEmpty() \
             .StringMustNotIncludeWhitespace() \
             .StringMustBeLongerThan(4)
-        use_cached_data = StringValidator(request.args["cache"]) \
+
+        use_cached_data = request.args["cache"]
+        StringValidator(use_cached_data) \
             .StringMustEqualBooleanValue()
 
         tweets: [Tweet] = []
