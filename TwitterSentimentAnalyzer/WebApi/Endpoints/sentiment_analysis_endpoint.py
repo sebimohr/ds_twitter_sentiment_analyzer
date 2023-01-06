@@ -6,6 +6,7 @@ from Algorithm.DataClasses.csv_helper import CsvHelper
 from Algorithm.DataClasses.tweet import Tweet
 from Algorithm.DataClasses.tweet_dataframe_helper import TweetDataframeHelper
 from Algorithm.SentimentAnalysis.sentiment_analyzer import SentimentAnalyzer
+from Algorithm.TwitterApiAbstractions.string_validator import StringValidator
 from Algorithm.TwitterApiAbstractions.tweepy_client import TweepyClient
 
 
@@ -20,8 +21,12 @@ class SentimentAnalysisEndpoint(Resource):
         print("Retrieving tweets from Twitter API")
 
         # get query parameter hashtag
-        hashtag = request.args["hashtag"]
-        use_cached_data = request.args["cache"]
+        hashtag = StringValidator(request.args["hashtag"]) \
+            .StringShouldNotBeEmpty() \
+            .StringMustNotIncludeWhitespace() \
+            .StringMustBeLongerThan(4)
+        use_cached_data = StringValidator(request.args["cache"]) \
+            .StringMustEqualBooleanValue()
 
         tweets: [Tweet] = []
         if use_cached_data == "true" and CsvHelper(hashtag).CachedDataDoesExist():
