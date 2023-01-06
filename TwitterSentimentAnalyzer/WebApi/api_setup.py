@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
 
 from WebApi.Endpoints.get_followers_endpoint import GetFollowersEndpoint
@@ -13,6 +14,7 @@ class ApiSetup:
     def __init__(self, port: int):
         """ initialize the api with the number where it should run on """
         self.app = Flask(__name__)
+        CORS(self.app)
         self.api = Api(self.app)
         self.port = port
 
