@@ -5,7 +5,7 @@ const percentage = (count: number, total_count: number): string => {
     return percentageOfAllTweets.toString();
 }
 
-export const CanvasSettings = (positiveCount: number, neutralCount: number, negativeCount: number) => {
+export const ChartSettings = (positiveCount: number, neutralCount: number, negativeCount: number) => {
     const total_count = positiveCount + neutralCount + negativeCount;
 
     return {

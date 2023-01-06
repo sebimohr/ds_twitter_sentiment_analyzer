@@ -2,7 +2,7 @@ import { InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 
 import { SentimentProps } from "./sentiment-props";
-import { CanvasJSChart, CanvasSettings } from "./canvas-settings";
+import { CanvasJSChart, ChartSettings } from "./chart-settings";
 import SentimentScreenList from "./sentiment-screen-list";
 import { SentimentScreenListItem } from "./sentiment-screen-list-item";
 
@@ -51,7 +51,7 @@ export default function SentimentScreen(props: SentimentProps) {
                     <Typography>
                         Sentiment Analysis
                     </Typography>
-                    <Chart options={CanvasSettings(positiveCount, neutralCount, negativeCount)}/>
+                    <Chart options={ChartSettings(positiveCount, neutralCount, negativeCount)}/>
                 </Stack>
                 <Stack direction="row" spacing={2}>
                     <SentimentScreenList isHashtagList={true} listToShow={test_list}/>
