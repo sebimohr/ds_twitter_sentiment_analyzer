@@ -11,12 +11,6 @@ class SentimentAnalyzer:
 
     def AnalyseSentimentOfTweetList(self) -> [Tweet]:
         """ analyzes the given tweets, returns the tweets but with values in the sentiment attributes """
-        neutral_list = []
-        negative_list = []
-        positive_list = []
-
-        tweets_count = len(self.tweets)
-
         for tweet in self.tweets:
             blob_analyzed = TextBlob(tweet.content)
 
@@ -24,17 +18,6 @@ class SentimentAnalyzer:
             tweet.sentiment.sentiment_score = GetPolarity(blob_analyzed)
             tweet_polarity_rating = RatePolarity(tweet)
             tweet.sentiment.sentiment_rating_value = tweet_polarity_rating
-
-            if tweet_polarity_rating > 0:
-                negative_list.append(tweet)
-            elif tweet_polarity_rating > 0:
-                positive_list.append(tweet)
-            else:
-                neutral_list.append(tweet)
-
-        """ print(f"Positive tweets percentage: {PercentageOfTweets(tweets_count, len(positive_list))}%\n"
-              f"Negative tweets percentage: {PercentageOfTweets(tweets_count, len(negative_list))}%\n"
-              f"Neutral tweets percentage:{PercentageOfTweets(tweets_count, len(neutral_list))}%") """
 
         return self.tweets
 
