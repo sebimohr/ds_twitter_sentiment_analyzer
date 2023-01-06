@@ -8,12 +8,9 @@ import axios from "axios";
 import MessageSnackbar from "./StartScreen/message-snackbar";
 import { Stack } from "@mui/material";
 import { Tweet } from "./SentimentScreen/tweet";
+import { SnackbarSeverity } from "./Infrastructure/snackbar-severity";
 
 const backendApiUrl = "http://127.0.0.1:9001";
-
-const sleep = (ms: number) => new Promise(
-    resolve => setTimeout(resolve, ms)
-);
 
 export default function App() {
     const [hashtag, setHashtag] = React.useState<string>('');
@@ -25,14 +22,14 @@ export default function App() {
 
     const [snackbarIsShown, setSnackbarIsShown] = React.useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState<string>('');
-    const [snackbarIsError, setSnackbarIsError] = React.useState<boolean>(false);
+    const [snackbarSeverity, setSnackbarSeverity] = React.useState<SnackbarSeverity>(SnackbarSeverity.Success);
 
     const [sentimentScreenIsShown, setSentimentScreenIsShown] = React.useState<boolean>(false);
 
-    const showSnackbar = (message: string, isFatalError: boolean) => {
+    const showSnackbar = (message: string, severity: SnackbarSeverity) => {
         setSnackbarIsShown(true);
         setSnackbarMessage(message);
-        setSnackbarIsError(isFatalError);
+        setSnackbarSeverity(severity);
     }
 
     const hashtagScreenSubmission = async () => {
@@ -40,15 +37,25 @@ export default function App() {
 
         await axios.get(backendApiUrl + '/api/sentiment', {
             params: {
-                hashtag: hashtag,
+                hashtag: hashtag ?? "x",
                 cache: useCachedData
+            },
+            validateStatus: function (status) {
+                return status <= 404;
             }
         })
             .then(response => {
                 if (response.status !== 200) {
+                    let clientErrorMessage: string
+
+                    if (response.status === 400) {
+                        clientErrorMessage = "The server denied your request because of invalid input"
+                    } else {
+                        clientErrorMessage = "The server denied your request, please try again or inform your system administrator"
+                    }
                     responseFailure(
-                        `The server denied your request, please try again or inform your system administrator`,
-                        true,
+                        clientErrorMessage,
+                        SnackbarSeverity.Warning,
                         `Expected status code 200, was ${response.status} instead.`)
                     return;
                 }
@@ -64,19 +71,24 @@ export default function App() {
                 } else {
                     responseFailure(
                         "No tweets could be retrieved, please try again with a different value",
-                        false,
+                        SnackbarSeverity.Info,
                         "Retrieved list of tweets was empty.")
                 }
             })
-            .catch(error => responseFailure(
-                "Server couldn't be reached, please inform your system administrator",
-                true,
-                error));
+            .catch(error => {
+                let clientErrorMessage: string;
+                clientErrorMessage = "Server couldn't be reached, please inform your system administrator";
+
+                return responseFailure(
+                    clientErrorMessage,
+                    SnackbarSeverity.Error,
+                    error.toJSON());
+            });
     }
 
-    const responseFailure = (clientErrorMessage: string, isError: boolean, logMessage: string) => {
+    const responseFailure = (clientErrorMessage: string, severity: SnackbarSeverity, logMessage: string) => {
         setLoadingScreenIsShown(false);
-        showSnackbar(clientErrorMessage, isError);
+        showSnackbar(clientErrorMessage, severity);
         console.log(logMessage);
     }
 
@@ -104,7 +116,7 @@ export default function App() {
                             openErrorSnackbar={snackbarIsShown}
                             changeOpenErrorSnackbar={setSnackbarIsShown}
                             errorMessage={snackbarMessage}
-                            isFatalError={snackbarIsError}/>
+                            errorCode={snackbarSeverity}/>
                     </div>
                 </Stack>
             </ThemeHelper>

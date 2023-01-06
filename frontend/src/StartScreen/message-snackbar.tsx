@@ -1,12 +1,31 @@
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, AlertColor, Snackbar } from "@mui/material";
 import React from "react";
+import { SnackbarSeverity } from "../Infrastructure/snackbar-severity";
 
 export default function MessageSnackbar(props: {
     openErrorSnackbar: boolean
     changeOpenErrorSnackbar: Function
     errorMessage: string
-    isFatalError: boolean
+    errorCode: SnackbarSeverity
 }) {
+    let errorSeverity: AlertColor;
+    switch (props.errorCode) {
+        case SnackbarSeverity.Error:
+            errorSeverity = "error";
+            break;
+        case SnackbarSeverity.Warning:
+            errorSeverity = "warning";
+            break;
+        case SnackbarSeverity.Info:
+            errorSeverity = "info";
+            break;
+        case SnackbarSeverity.Success:
+            errorSeverity = "success";
+            break;
+        default:
+            errorSeverity = "error";
+    }
+
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
@@ -29,7 +48,7 @@ export default function MessageSnackbar(props: {
             >
                 <Alert
                     onClose={handleClose}
-                    severity={props.isFatalError ? "error" : "info"}
+                    severity={errorSeverity}
                 >{props.errorMessage}</Alert>
             </Snackbar>
         </div>
