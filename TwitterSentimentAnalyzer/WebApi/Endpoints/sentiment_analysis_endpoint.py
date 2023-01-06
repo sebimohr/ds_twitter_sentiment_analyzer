@@ -10,7 +10,7 @@ from Algorithm.TwitterApiAbstractions.string_validator import StringValidator
 from Algorithm.TwitterApiAbstractions.tweepy_client import TweepyClient
 
 
-class SentimentAnalysisEndpoint(Resource):
+class GetSentimentAnalysisEndpoint(Resource):
     tweepy_client: TweepyClient
     max_results: int = 50
 
@@ -25,7 +25,7 @@ class SentimentAnalysisEndpoint(Resource):
         StringValidator(hashtag) \
             .StringShouldNotBeEmpty() \
             .StringMustNotIncludeWhitespace() \
-            .StringMustBeLongerThan(4)
+            .StringMustBeLongerThan(3)
 
         use_cached_data = request.args["cache"]
         StringValidator(use_cached_data) \

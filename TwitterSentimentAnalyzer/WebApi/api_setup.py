@@ -3,7 +3,8 @@ from flask_cors import CORS
 from flask_restful import Api
 
 from WebApi.Endpoints.get_followers_endpoint import GetFollowersEndpoint
-from WebApi.Endpoints.sentiment_analysis_endpoint import SentimentAnalysisEndpoint
+from WebApi.Endpoints.get_top_hashtags_and_users_endpoint import GetTopHashtagsAndUsersEndpoint
+from WebApi.Endpoints.sentiment_analysis_endpoint import GetSentimentAnalysisEndpoint
 
 
 class ApiSetup:
@@ -20,8 +21,9 @@ class ApiSetup:
 
     def RegisterApiEndpoints(self):
         """ registers all api endpoints """
-        self.api.add_resource(SentimentAnalysisEndpoint, '/api/sentiment')
+        self.api.add_resource(GetSentimentAnalysisEndpoint, '/api/sentiment')
         self.api.add_resource(GetFollowersEndpoint, '/api/followers')
+        self.api.add_resource(GetTopHashtagsAndUsersEndpoint, '/api/top')
         return self
 
     def RunApi(self):

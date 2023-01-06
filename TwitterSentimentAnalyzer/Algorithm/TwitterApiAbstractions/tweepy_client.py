@@ -39,6 +39,16 @@ class TweepyClient:
         validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()
 
         user_id.strip()
-        users = self.client.get_users_followers(user_id)
+        users = self.client.get_users_followers(id = user_id)
 
         return DataParser.ParseUsersFromApiToUsersDataClassList(users)
+
+    def GetUserMetricsByUserId(self, user_id: str) -> User:
+        """ load a user by user id """
+        validator = StringValidator(user_id)
+        validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()
+
+        user_id.strip()
+        user = self.client.get_user(id = user_id)
+
+        return DataParser.ParseUserFromApiToUserDataClass(user.data)

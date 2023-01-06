@@ -19,7 +19,7 @@ class StringValidator:
             abort(400, message = f"String \"{self.value}\" should not include whitespace")
         return self
 
-    def StringMustBeLongerThan(self, min_length: int):
+    def StringMustBeLongerThan(self, min_length: int = 1):
         """ Validates if the given string is of the specified minimum length """
         if len(self.value) < min_length:
             abort(400, message = f"String \"{self.value}\" is not of minimum length {min_length}")

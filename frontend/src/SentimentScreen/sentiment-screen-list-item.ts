@@ -1,5 +1,5 @@
 export interface SentimentScreenListItem {
-    id: number
+    id: string
     main_text: string
     sub_text: string
     sentiment: number
