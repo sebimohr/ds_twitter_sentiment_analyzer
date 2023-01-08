@@ -45,10 +45,12 @@ class TweepyClient:
 
     def GetUserMetricsByUserId(self, user_id: str) -> User:
         """ load a user by user id """
-        validator = StringValidator(user_id)
-        validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()
+        if isinstance(user_id, str):
+            validator = StringValidator(user_id)
+            validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()
 
-        user_id.strip()
+            user_id.strip()
+
         user = self.client.get_user(id = user_id)
 
         return DataParser.ParseUserFromApiToUserDataClass(user.data)

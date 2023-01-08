@@ -1,7 +1,6 @@
 import json
+from datetime import datetime, date
 
-import pandas as pd
-import pandas.io.json
 from pandas import DataFrame
 
 from Algorithm.DataClasses.tweet import Tweet
@@ -17,7 +16,11 @@ class TweetDataframeHelper:
 
     def ToDataFrame(self) -> DataFrame:
         """ convert tweet_list into DataFrame object """
-        return DataFrame.from_dict(self.tweet_list)
+        for tweet in self.tweet_list:
+            created_at_json = json.dumps(tweet.metrics.created_at, default = json_serializer_date).strip('"')
+            tweet.metrics.created_at = created_at_json
+
+        return DataFrame(self.tweet_list)
 
     def FromDataFrame(self, data: DataFrame) -> [Tweet]:
         """ converts dataFrame into tweet object """
@@ -25,14 +28,16 @@ class TweetDataframeHelper:
             return self.tweet_list
 
         for tweet in data.to_dict(orient = 'index').values():
-            # TODO: sentiment and metrics currently get saved as string -> read how to do it with dataFrame
-            metrics = json.loads(tweet['metrics'].replace("'", "\""))
-            sentiment = json.loads(tweet['sentiment'].replace("'", "\""))
+            # this is not the best way, but it works for the time
+            # Should be updated sometimes -> DataFrame cells should be named "metrics.author_id" for example
+            metrics = json.loads(tweet["metrics"].replace('\'', '"'))
+            sentiment = json.loads(tweet["sentiment"].replace('\'', '"'))
 
             self.tweet_list.append(Tweet(tweet["id"],
                                          tweet["content"],
                                          TweetMetrics(metrics["author_id"],
-                                                      metrics["created_at"],
+                                                      datetime.strptime(metrics["created_at"][:10],
+                                                                        '%Y-%m-%d').date(),
                                                       metrics["retweet_count"],
                                                       metrics["reply_count"],
                                                       metrics["like_count"],
@@ -42,3 +47,10 @@ class TweetDataframeHelper:
                                          ))
 
         return self.tweet_list
+
+
+def json_serializer_date(obj):
+    """ JSON Serializer for date serialization """
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError("Type %s not serializable" % type(obj))

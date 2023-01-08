@@ -10,9 +10,10 @@ class TopHashtagsAndUsersAnalyzer:
 
     def __init__(self, tweet_list: [Tweet], hashtag: str):
         self.tweet_list = tweet_list
-        self.hashtag = hashtag
+        self.hashtag = "#" + hashtag
 
     def AnalyzeTweetList(self) -> tuple[[SortedItem], [SortedItem]]:
+        """ Analyzes the top users and hashtags in the given tweet_list """
         user_list = list()
         hashtag_list = list()
 
@@ -20,15 +21,18 @@ class TopHashtagsAndUsersAnalyzer:
 
         for tweet in self.tweet_list:
             hashtags = re.findall(regex, tweet.content.lower())
-            hashtags.remove(self.hashtag)
+            if self.hashtag in hashtags:
+                hashtags.remove(self.hashtag)
+            elif self.hashtag[1:] in hashtags:
+                hashtags.remove(self.hashtag[1:])
 
             for hashtag in hashtags:
                 hashtag_list = UpdateListWithEntry(hashtag, hashtag_list, tweet.sentiment.sentiment_score)
 
             user_list = UpdateListWithEntry(tweet.metrics.author_id, user_list, tweet.sentiment.sentiment_score)
 
-        user_list = ListSorter(user_list)
-        hashtag_list = ListSorter(hashtag_list)
+        ListSorter(user_list)
+        ListSorter(hashtag_list)
 
         return user_list, hashtag_list
 
@@ -49,4 +53,4 @@ def UpdateListWithEntry(value: str, list_to_update: [SortedItem], sentiment_scor
 
 
 def ListSorter(list_to_sort: [SortedItem]):
-    return list_to_sort(key = lambda x: x.count, reversed = True)
+    return list_to_sort.sort(key = lambda x: x.count, reverse = True)

@@ -31,7 +31,7 @@ def RatePolarity(tweet: Tweet) -> int:
     """ rates polarity in tweet """
     polarity_score = tweet.sentiment.sentiment_score
 
-    if polarity_score < 0.5:
+    if polarity_score < -0.5:
         return -2
     elif polarity_score < 0:
         return -1

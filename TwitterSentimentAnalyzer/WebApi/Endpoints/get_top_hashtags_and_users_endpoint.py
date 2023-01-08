@@ -32,15 +32,15 @@ class GetTopHashtagsAndUsersEndpoint(Resource):
             return
 
         tweets = TweetDataframeHelper(tweets).FromDataFrame(cached_dataframe)
-        user_list, hashtag_list = TopHashtagsAndUsersAnalyzer(tweets).AnalyzeTweetList()
+        user_list, hashtag_list = TopHashtagsAndUsersAnalyzer(tweets, hashtag).AnalyzeTweetList()
 
         for user in user_list:
             user.id = user.name
             user.name = GetUsername(self.tweepy_client, user.id)
 
         return jsonify({
-            'hashtags': hashtag_list[:4],
-            'users': user_list[:4]
+            'hashtags': hashtag_list[:5],
+            'users': user_list[:5]
         })
 
 
