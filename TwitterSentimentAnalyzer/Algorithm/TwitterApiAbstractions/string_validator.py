@@ -5,7 +5,10 @@ class StringValidator:
     value: str
 
     def __init__(self, value: str):
-        self.value = value.strip()
+        if isinstance(value, str):
+            self.value = value.strip()
+        else:
+            self.value = f"{value}"
 
     def StringShouldNotBeEmpty(self):
         """ Validates if the given string is empty """
@@ -30,3 +33,6 @@ class StringValidator:
         if self.value.lower() not in ['true', 'false']:
             abort(400, message = f"Value \"{self.value}\" is not a boolean")
         return self
+
+    def Value(self):
+        return self.value

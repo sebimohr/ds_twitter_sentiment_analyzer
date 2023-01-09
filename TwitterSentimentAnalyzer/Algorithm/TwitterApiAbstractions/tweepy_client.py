@@ -10,6 +10,9 @@ from Algorithm.environment_variables import EnvironmentVariablesHelper
 class TweepyClient:
     client: tweepy.Client
 
+    required_tweet_fields = ['id', 'text', 'author_id', 'created_at', 'public_metrics']
+    required_user_fields = ['id', 'name', 'username', 'description', 'profile_image_url', 'public_metrics', 'verified']
+
     def __init__(self):
         self.client = tweepy.Client(EnvironmentVariablesHelper.GetBearerToken())
 
@@ -26,8 +29,7 @@ class TweepyClient:
 
         query = f'{hashtag} lang:en'
         tweets = self.client.search_recent_tweets(query = query,
-                                                  tweet_fields = ['id', 'text', 'author_id', 'created_at',
-                                                                  'public_metrics'],
+                                                  tweet_fields = self.required_tweet_fields,
                                                   max_results = max_results)
 
         return DataParser.ParseTweetsFromApiToTweetDataClassList(tweets)
@@ -36,21 +38,15 @@ class TweepyClient:
         """ loads all followers of the user with the specified user_id """
         # validate input before accessing api
         validator = StringValidator(user_id)
-        validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()
+        user_id = validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace().Value()
 
-        user_id.strip()
-        users = self.client.get_users_followers(id = user_id)
-
-        return DataParser.ParseUsersFromApiToUsersDataClassList(users)
+        users = self.client.get_users_followers(id = user_id, user_fields = self.required_user_fields)
+        return DataParser().ParseUsersFromApiToUsersDataClassList(users)
 
     def GetUserMetricsByUserId(self, user_id: str) -> User:
         """ load a user by user id """
-        if isinstance(user_id, str):
-            validator = StringValidator(user_id)
-            validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace()
+        validator = StringValidator(user_id)
+        user_id = validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace().Value()
 
-            user_id.strip()
-
-        user = self.client.get_user(id = user_id)
-
-        return DataParser.ParseUserFromApiToUserDataClass(user.data)
+        user = self.client.get_user(id = user_id, user_fields = self.required_user_fields)
+        return DataParser.ParseUserFromApiToUserDataClass(user)
