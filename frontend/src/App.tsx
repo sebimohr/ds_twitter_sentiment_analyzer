@@ -9,6 +9,7 @@ import { Stack } from "@mui/material";
 import { Tweet } from "./SentimentScreen/tweet";
 import { SnackbarSeverity } from "./Infrastructure/snackbar-severity";
 import { AxiosClient } from "./Client/axios-client";
+import { SentimentScreenListItem } from "./SentimentScreen/sentiment-screen-list-item";
 
 const backendApiUrl = "http://127.0.0.1:9001";
 const client = new AxiosClient(backendApiUrl);
@@ -16,7 +17,6 @@ const client = new AxiosClient(backendApiUrl);
 export default function App() {
     const [hashtag, setHashtag] = React.useState<string>('');
     const [useCachedData, setUseCachedData] = React.useState<boolean>(true);
-    const [tweetList, setTweetList] = React.useState<Tweet[]>([]);
 
     const [hashtagScreenIsShown, setHashtagScreenIsShown] = React.useState<boolean>(true);
     const [loadingScreenIsShown, setLoadingScreenIsShown] = React.useState<boolean>(false);
@@ -25,12 +25,16 @@ export default function App() {
     const [snackbarMessage, setSnackbarMessage] = React.useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = React.useState<SnackbarSeverity>(SnackbarSeverity.Success);
 
+    const [tweetList, setTweetList] = React.useState<Tweet[]>([]);
+    const [topHashtagsList, setTopHashtagsList] = React.useState<SentimentScreenListItem[]>([]);
+    const [topUsersList, setTopUsersList] = React.useState<SentimentScreenListItem[]>([]);
     const [sentimentScreenIsShown, setSentimentScreenIsShown] = React.useState<boolean>(false);
 
-    const showSnackbar = (message: string, severity: SnackbarSeverity) => {
+    const showSnackbar = (message: string, severity: SnackbarSeverity, logMessage: string) => {
         setSnackbarIsShown(true);
         setSnackbarMessage(message);
         setSnackbarSeverity(severity);
+        console.log(logMessage);
     }
 
     const hashtagScreenSubmission = async () => {
@@ -38,16 +42,28 @@ export default function App() {
 
         await client.GetTweetsWithSentiment(hashtag,
             useCachedData,
-            (clientErrorMessage: string, severity: SnackbarSeverity, logMessage: string) => {
+            (clientErrorMessage: string,
+             severity: SnackbarSeverity,
+             logMessage: string) => {
                 setLoadingScreenIsShown(false);
-                showSnackbar(clientErrorMessage, severity);
-                console.log(logMessage);
+                showSnackbar(clientErrorMessage, severity, logMessage);
             },
             (tweets: Tweet[]) => {
                 setTweetList(tweets);
                 setLoadingScreenIsShown(false);
                 setHashtagScreenIsShown(false);
                 setSentimentScreenIsShown(true);
+            });
+
+        await client.GetTopHashtagsAndUsers(hashtag,
+            (clientErrorMessage: string,
+             severity: SnackbarSeverity,
+             logMessage: string) =>
+                showSnackbar(clientErrorMessage, severity, logMessage),
+            (topHashtags: SentimentScreenListItem[],
+             topUsers: SentimentScreenListItem[]) => {
+                setTopHashtagsList(topHashtags);
+                setTopUsersList(topUsers);
             });
     }
 
@@ -68,7 +84,9 @@ export default function App() {
                             hashtag={hashtag}
                             isShown={sentimentScreenIsShown}
                             changeIsShown={setSentimentScreenIsShown}
-                            tweetsList={tweetList}/>
+                            tweetsList={tweetList}
+                            topHashtagsList={topHashtagsList}
+                            topUsersList={topUsersList}/>
                         <LoadingBackdrop
                             showDialog={loadingScreenIsShown}/>
                         <MessageSnackbar
