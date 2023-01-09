@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton } from "@mui/material";
 import TagIcon from '@mui/icons-material/Tag';
 import PersonIcon from '@mui/icons-material/Person';
 import React from "react";
@@ -21,6 +21,7 @@ const determineListItemColor = (sentiment: number): string => {
 export default function SentimentScreenList(props: {
     isHashtagList: boolean
     listToShow: SentimentScreenListItem[]
+    showSkeleton: boolean
 }) {
     const isHashtagList = props.isHashtagList;
 
@@ -38,11 +39,33 @@ export default function SentimentScreenList(props: {
         </ListItem>
     );
 
+    const mockListItem =
+        <ListItem>
+            <ListItemButton sx={{
+                borderRadius: 2
+            }}>
+                <ListItemIcon><TagIcon/></ListItemIcon>
+                <ListItemText
+                    primary="empty"
+                    secondary="empty2"/>
+            </ListItemButton>
+        </ListItem>;
+
+    const listSkeleton = <Skeleton variant="rounded" width={'100%'}>
+        {mockListItem}
+        {mockListItem}
+        {mockListItem}
+        {mockListItem}
+        {mockListItem}
+    </Skeleton>;
+
     return (
         <List
             sx={{width: '50%'}}
             aria-label={isHashtagList ? "Top Hashtags" : "Top Users"}>
-            {listItems}
+            {props.showSkeleton ?
+                listSkeleton :
+                listItems}
         </List>
     )
 }

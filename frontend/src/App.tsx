@@ -55,6 +55,8 @@ export default function App() {
                 setSentimentScreenIsShown(true);
             });
 
+        await delay(500);
+
         await client.GetTopHashtagsAndUsers(hashtag,
             (clientErrorMessage: string,
              severity: SnackbarSeverity,
@@ -99,4 +101,8 @@ export default function App() {
             </ThemeHelper>
         </div>
     );
+}
+
+function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
 }
