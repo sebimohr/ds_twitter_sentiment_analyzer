@@ -12,12 +12,14 @@ export class AxiosClient {
 
     async GetTweetsWithSentiment(hashtag: string,
                                  useCachedData: boolean,
+                                 tweetCount: number,
                                  responseFailure: Function,
                                  responseSuccess: Function) {
         await axios.get(this.backendApiUrl + '/api/sentiment', {
             params: {
                 hashtag: hashtag,
-                cache: useCachedData
+                cache: useCachedData,
+                tweet_count: tweetCount
             },
             validateStatus: function (status) {
                 return status <= 404;

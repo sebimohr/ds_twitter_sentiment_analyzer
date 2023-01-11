@@ -43,19 +43,24 @@ export default function App() {
 
         await client.GetTweetsWithSentiment(hashtag,
             useCachedData,
+            tweetCount,
             (clientErrorMessage: string,
              severity: SnackbarSeverity,
              logMessage: string) => {
                 setLoadingScreenIsShown(false);
                 showSnackbar(clientErrorMessage, severity, logMessage);
             },
-            (tweets: Tweet[]) => {
+            async (tweets: Tweet[]) => {
                 setTweetList(tweets);
                 setLoadingScreenIsShown(false);
                 setHashtagScreenIsShown(false);
                 setSentimentScreenIsShown(true);
+                await requestTopHashtagsAndUsers()
             });
 
+    }
+
+    const requestTopHashtagsAndUsers = async () => {
         await client.GetTopHashtagsAndUsers(hashtag,
             (clientErrorMessage: string,
              severity: SnackbarSeverity,

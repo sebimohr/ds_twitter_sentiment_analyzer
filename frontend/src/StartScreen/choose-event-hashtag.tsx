@@ -11,20 +11,24 @@ import { HashtagProps } from "./hashtag-props";
 
 const sliderMarks = [
     {
-        value: 20,
-        label: "20 Tweets"
+        value: 10,
+        label: "10 Tweets"
+    },
+    {
+        value: 25,
+        label: "25 Tweets"
     },
     {
         value: 50,
         label: "50 Tweets"
     },
     {
-        value: 100,
-        label: "100 Tweets"
+        value: 80,
+        label: "80 Tweets"
     },
     {
-        value: 200,
-        label: "200 Tweets"
+        value: 100,
+        label: "100 Tweets"
     },
 ]
 
@@ -61,8 +65,8 @@ export default function ChooseEventHashtag(props: HashtagProps) {
         aria-label="tweet_count"
         defaultValue={tweetCount}
         onChange={handleTweetCountChanged}
-        min={20}
-        max={200}
+        min={10}
+        max={100}
         getAriaValueText={sliderText}
         step={null}
         valueLabelDisplay="auto"

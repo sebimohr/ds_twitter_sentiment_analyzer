@@ -28,8 +28,9 @@ class TweepyClient:
         if hashtag[0] != '#':
             hashtag = "#" + hashtag
 
-        query = f'{hashtag} lang:en'
+        query = f'{hashtag} lang:en -is:retweet has:hashtags'
         tweets = self.client.search_recent_tweets(query = query,
+                                                  sort_order = "relevancy",
                                                   tweet_fields = self.required_tweet_fields,
                                                   max_results = max_results)
 

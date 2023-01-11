@@ -12,7 +12,6 @@ from Algorithm.TwitterApiAbstractions.tweepy_client import TweepyClient
 
 class GetSentimentAnalysisEndpoint(Resource):
     tweepy_client: TweepyClient
-    max_results: int = 50
 
     def __init__(self):
         self.tweepy_client = TweepyClient()
@@ -31,6 +30,16 @@ class GetSentimentAnalysisEndpoint(Resource):
         StringValidator(use_cached_data) \
             .StringMustEqualBooleanValue()
 
+        tweet_count = request.args["tweet_count"]
+        StringValidator(tweet_count) \
+            .StringShouldNotBeEmpty() \
+            .StringMustNotIncludeWhitespace() \
+            .StringMustBeANumber()
+
+        tweet_count = int(tweet_count)
+        if tweet_count < 20 or tweet_count > 200:
+            tweet_count = 50
+
         tweets: [Tweet] = []
         if use_cached_data == "true" and CsvHelper(hashtag).CachedDataDoesExist():
             # when cached data is used, the sentiment has already been analyzed
@@ -40,17 +49,17 @@ class GetSentimentAnalysisEndpoint(Resource):
                 cached_dataframe = DataFrame()
             tweets = TweetDataframeHelper(tweets).FromDataFrame(cached_dataframe)
         else:
-            tweets = self.CachedDataIsNotUsed(hashtag)
+            tweets = self.CachedDataIsNotUsed(hashtag, tweet_count)
 
         if len(tweets) < 1:
-            tweets = self.CachedDataIsNotUsed(hashtag)
+            tweets = self.CachedDataIsNotUsed(hashtag, tweet_count)
 
         return jsonify({'tweets': tweets})
 
-    def CachedDataIsNotUsed(self, hashtag: str) -> [Tweet]:
+    def CachedDataIsNotUsed(self, hashtag: str, tweet_count: int) -> [Tweet]:
         """ call this method when cached data is not used and new data has to be retrieved from Twitter """
         # when getting new data, retrieve tweets, save them in csv, analyze sentiment
-        tweets = self.tweepy_client.GetTweetsByHashtag(hashtag, self.max_results)
+        tweets = self.tweepy_client.GetTweetsByHashtag(hashtag, tweet_count)
 
         # get tweets from twitter api
         print(f"Retrieved {len(tweets)} Tweets")

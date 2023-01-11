@@ -10,7 +10,7 @@ class TopHashtagsAndUsersAnalyzer:
 
     def __init__(self, tweet_list: [Tweet], hashtag: str):
         self.tweet_list = tweet_list
-        self.hashtag = "#" + hashtag
+        self.hashtag = "#" + hashtag.lower()
 
     def AnalyzeTweetList(self) -> tuple[[SortedItem], [SortedItem]]:
         """ Analyzes the top users and hashtags in the given tweet_list """
