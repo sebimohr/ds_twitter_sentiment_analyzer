@@ -44,7 +44,10 @@ export const ChartSettings = (positiveCount: number, neutralCount: number, negat
 
 // configure canvasJS
 const CanvasJS = CanvasJSReact.CanvasJS;
-CanvasJS.addColorSet("customColorSet", ["#559E55", "#8F8F88", "#BF5250"])
+CanvasJS.addColorSet("customColorSet", [
+    "#00e676",
+    "#bdbdbd",
+    "#ff1744"])
 
 // import canvasJSChart from canvasjs library
 export const CanvasJSChart = CanvasJSReact.CanvasJSChart;

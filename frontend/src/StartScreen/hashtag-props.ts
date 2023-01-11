@@ -3,6 +3,8 @@ export interface HashtagProps {
     setHashtag: Function
     useCachedData: boolean
     setUseCachedData: Function
+    tweetCount: number
+    setTweetCount: Function
     isShown: boolean
     changeIsShown: Function
 }

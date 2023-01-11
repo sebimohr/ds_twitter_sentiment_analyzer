@@ -28,18 +28,18 @@ export default function SentimentScreen(props: SentimentProps) {
                     fullWidth
                     id="outlined-read-only-input"
                     InputProps={{
-                        startAdornment: <InputAdornment position="start">your Event: #</InputAdornment>,
+                        startAdornment: <InputAdornment position="start">your Event:</InputAdornment>,
                     }}
                     inputProps={{style: {textAlign: 'center'}}}
                     variant="outlined"
-                    value={hashtag}
+                    value={"#" + hashtag}
                     sx={{
                         marginTop: 2,
                         marginBottom: 2
                     }}
                 />
                 <Stack>
-                    <Typography>
+                    <Typography variant="h4" align="center">
                         Sentiment Analysis
                     </Typography>
                     <Chart options={ChartSettings(positiveCount, neutralCount, negativeCount)}/>

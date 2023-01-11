@@ -5,7 +5,7 @@ import ThemeHelper from "./Infrastructure/theme-helper";
 import SentimentScreen from "./SentimentScreen/sentiment-screen";
 import LoadingBackdrop from "./StartScreen/loading-backdrop";
 import MessageSnackbar from "./StartScreen/message-snackbar";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { Tweet } from "./SentimentScreen/tweet";
 import { SnackbarSeverity } from "./Infrastructure/snackbar-severity";
 import { AxiosClient } from "./Client/axios-client";
@@ -17,6 +17,7 @@ const client = new AxiosClient(backendApiUrl);
 export default function App() {
     const [hashtag, setHashtag] = React.useState<string>('');
     const [useCachedData, setUseCachedData] = React.useState<boolean>(true);
+    const [tweetCount, setTweetCount] = React.useState<number>(50);
 
     const [hashtagScreenIsShown, setHashtagScreenIsShown] = React.useState<boolean>(true);
     const [loadingScreenIsShown, setLoadingScreenIsShown] = React.useState<boolean>(false);
@@ -55,8 +56,6 @@ export default function App() {
                 setSentimentScreenIsShown(true);
             });
 
-        await delay(500);
-
         await client.GetTopHashtagsAndUsers(hashtag,
             (clientErrorMessage: string,
              severity: SnackbarSeverity,
@@ -74,12 +73,21 @@ export default function App() {
             <ThemeHelper>
                 <Stack>
                     {/*<NavigationBar/>*/}
+                    <Typography variant="h3"
+                                sx={{
+                                    marginTop: 4,
+                                    marginBottom: 4
+                                }}>
+                        Twitter Sentiment Analyzer
+                    </Typography>
                     <div>
                         <ChooseEventHashtag
                             hashtag={hashtag}
                             setHashtag={setHashtag}
                             useCachedData={useCachedData}
                             setUseCachedData={setUseCachedData}
+                            tweetCount={tweetCount}
+                            setTweetCount={setTweetCount}
                             isShown={hashtagScreenIsShown}
                             changeIsShown={hashtagScreenSubmission}/>
                         <SentimentScreen
@@ -101,8 +109,4 @@ export default function App() {
             </ThemeHelper>
         </div>
     );
-}
-
-function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
 }
