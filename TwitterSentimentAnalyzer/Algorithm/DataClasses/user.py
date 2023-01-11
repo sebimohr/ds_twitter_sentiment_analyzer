@@ -11,3 +11,16 @@ class User:
     description: str
     profile_image_url: str
     metrics: UserMetric
+
+    @staticmethod
+    def EmptyUserWithId(user_id: str):
+        return User(
+                user_id,
+                "",
+                "",
+                "",
+                "",
+                UserMetric(
+                        0, 0, 0, 0, False
+                )
+        )

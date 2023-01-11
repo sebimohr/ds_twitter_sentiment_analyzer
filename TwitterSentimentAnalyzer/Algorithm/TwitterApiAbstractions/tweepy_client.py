@@ -14,7 +14,8 @@ class TweepyClient:
     required_user_fields = ['id', 'name', 'username', 'description', 'profile_image_url', 'public_metrics', 'verified']
 
     def __init__(self):
-        self.client = tweepy.Client(EnvironmentVariablesHelper.GetBearerToken())
+        self.client = tweepy.Client(EnvironmentVariablesHelper.GetBearerToken(),
+                                    wait_on_rate_limit = True)
 
     def GetTweetsByHashtag(self, hashtag: str, max_results = 50) -> [Tweet]:
         """ retrieves tweets from Twitter api """
@@ -49,4 +50,8 @@ class TweepyClient:
         user_id = validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace().Value()
 
         user = self.client.get_user(id = user_id, user_fields = self.required_user_fields)
-        return DataParser.ParseUserFromApiToUserDataClass(user)
+
+        if user.data is None:
+            return User.EmptyUserWithId(user_id)
+
+        return DataParser.ParseUserFromApiToUserDataClass(user.data)

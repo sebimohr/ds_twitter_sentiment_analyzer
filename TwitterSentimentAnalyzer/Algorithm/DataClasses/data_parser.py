@@ -52,7 +52,7 @@ class DataParser:
     def ParseUserFromApiToUserDataClass(user) -> User:
         user_metric: UserMetric
 
-        if user.public_metrics is not None:
+        if hasattr(user, "public_metrics"):
             user_metric = UserMetric(
                     user.public_metrics["followers_count"],
                     user.public_metrics["following_count"],

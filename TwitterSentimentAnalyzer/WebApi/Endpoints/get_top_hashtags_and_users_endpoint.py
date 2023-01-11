@@ -34,9 +34,21 @@ class GetTopHashtagsAndUsersEndpoint(Resource):
         tweets = TweetDataframeHelper(tweets).FromDataFrame(cached_dataframe)
         user_list, hashtag_list = TopHashtagsAndUsersAnalyzer(tweets, hashtag).AnalyzeTweetList()
 
+        not_found_users = []
         for user in user_list:
             user.id = user.name
             user.name = GetUsername(self.tweepy_client, user.id)
+            if not (len(user.name) > 0):
+                not_found_users.append(user)
+
+        if len(not_found_users) > 0:
+            for not_found_user in not_found_users:
+                try:
+                    user_list.remove(not_found_user)
+                except ValueError:
+                    print(f"Wasn't able to remove user with id '{not_found_user.id}'")
+
+        print(f"Retrieved {len(hashtag_list)} hashtags and {len(user_list)} users.")
 
         return jsonify({
             'hashtags': hashtag_list[:5],
