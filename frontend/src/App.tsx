@@ -57,7 +57,6 @@ export default function App() {
                 setSentimentScreenIsShown(true);
                 await requestTopHashtagsAndUsers()
             });
-
     }
 
     const requestTopHashtagsAndUsers = async () => {

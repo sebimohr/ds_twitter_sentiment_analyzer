@@ -3,6 +3,7 @@ import TagIcon from '@mui/icons-material/Tag';
 import PersonIcon from '@mui/icons-material/Person';
 import React from "react";
 import { SentimentScreenListItem } from "./sentiment-screen-list-item";
+import FollowersDialog from "../FollowersDialog/followers-dialog";
 
 const determineListItemColor = (sentiment: number): string => {
     if (sentiment > 0.5) {
@@ -26,12 +27,20 @@ export default function SentimentScreenList(props: {
     const isHashtagList = props.isHashtagList;
     const secondaryText = isHashtagList ? "with this hashtag" : "from this user";
 
+    const [followersDialogIsShown, setFollowersDialogIsShown] = React.useState<boolean>(false);
+
+    const openFollowersDialog = () => {
+        setFollowersDialogIsShown(true);
+    }
+
     const listItems = props.listToShow.map(value =>
         <ListItem key={value.id !== null ? value.id : value.name}>
-            <ListItemButton sx={{
-                bgcolor: determineListItemColor(value.sentiment),
-                borderRadius: 2
-            }}>
+            <ListItemButton
+                sx={{
+                    bgcolor: determineListItemColor(value.sentiment),
+                    borderRadius: 2
+                }}
+                onClick = {openFollowersDialog}>
                 <ListItemIcon>{isHashtagList ? <TagIcon/> : <PersonIcon/>}</ListItemIcon>
                 <ListItemText
                     primary={value.name}
@@ -62,7 +71,7 @@ export default function SentimentScreenList(props: {
     </Skeleton>;
 
     return (
-        <Stack sx={{width: '50%'}}>
+        <Stack sx={{width: '100%'}}>
             <Typography variant="h5" align="center">
                 {isHashtagList ? "Top Hashtags" : "Top Users"}
             </Typography>
@@ -72,6 +81,7 @@ export default function SentimentScreenList(props: {
                     listSkeleton :
                     listItems}
             </List>
+            <FollowersDialog openDialog={followersDialogIsShown} setOpenDialog={setFollowersDialogIsShown}/>
         </Stack>
     )
 }
