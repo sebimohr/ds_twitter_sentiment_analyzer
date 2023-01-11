@@ -34,5 +34,12 @@ class StringValidator:
             abort(400, message = f"Value \"{self.value}\" is not a boolean")
         return self
 
+    def StringMustBeANumber(self):
+        try:
+            int(self.value)
+        except ValueError:
+            abort(400, message = f"Value \"{self.value}\" is not a number")
+        return self
+
     def Value(self):
         return self.value
