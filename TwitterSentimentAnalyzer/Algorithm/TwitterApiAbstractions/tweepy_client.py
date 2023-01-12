@@ -39,16 +39,14 @@ class TweepyClient:
     def GetFollowersByUserId(self, user_id: str) -> [User]:
         """ loads all followers of the user with the specified user_id """
         # validate input before accessing api
-        validator = StringValidator(user_id)
-        user_id = validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace().Value()
+        user_id = ValidateUserId(user_id)
 
         users = self.client.get_users_followers(id = user_id, user_fields = self.required_user_fields)
         return DataParser().ParseUsersFromApiToUsersDataClassList(users)
 
     def GetUserMetricsByUserId(self, user_id: str) -> User:
         """ load a user by user id """
-        validator = StringValidator(user_id)
-        user_id = validator.StringShouldNotBeEmpty().StringMustNotIncludeWhitespace().Value()
+        user_id = ValidateUserId(user_id)
 
         user = self.client.get_user(id = user_id, user_fields = self.required_user_fields)
 
@@ -56,3 +54,23 @@ class TweepyClient:
             return User.EmptyUserWithId(user_id)
 
         return DataParser.ParseUserFromApiToUserDataClass(user.data)
+
+    def GetTweetsFromUserId(self, user_id: str) -> User:
+        """ load tweets from a user by their user_id """
+        user_id = ValidateUserId(user_id)
+
+        tweets = self.client.get_users_tweets(id = user_id,
+                                              tweet_fields = self.required_tweet_fields,
+                                              max_results = 50)
+
+        return DataParser.ParseTweetsFromApiToTweetDataClassList(tweets)
+
+
+def ValidateUserId(user_id: str) -> str:
+    validator = StringValidator(user_id)
+    user_id = validator.StringShouldNotBeEmpty() \
+        .StringMustNotIncludeWhitespace() \
+        .StringMustBeLongerThan(15) \
+        .Value()
+
+    return user_id

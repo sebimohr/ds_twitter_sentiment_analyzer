@@ -35,7 +35,7 @@ class GetTopHashtagsAndUsersEndpoint(Resource):
         user_list, hashtag_list = TopHashtagsAndUsersAnalyzer(tweets, hashtag).AnalyzeTweetList()
 
         not_found_users = []
-        for user in user_list:
+        for user in user_list[:15]:
             user.id = user.name
             user.name = GetUsername(self.tweepy_client, user.id)
             if not (len(user.name) > 0):
@@ -51,8 +51,8 @@ class GetTopHashtagsAndUsersEndpoint(Resource):
         print(f"Retrieved {len(hashtag_list)} hashtags and {len(user_list)} users.")
 
         return jsonify({
-            'hashtags': hashtag_list[:5],
-            'users': user_list[:5]
+            'hashtags': hashtag_list[:10],
+            'users': user_list[:10]
         })
 
 
