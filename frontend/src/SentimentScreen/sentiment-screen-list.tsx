@@ -4,7 +4,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import React from "react";
 import { SentimentScreenListItem } from "./sentiment-screen-list-item";
 import FollowersDialog from "../FollowersDialog/followers-dialog";
-import { User } from "../SentimentScreen/user";
+import { User } from "./user";
 import { AxiosClient } from "../Client/axios-client";
 import { SnackbarSeverity } from "../Infrastructure/snackbar-severity";
 
@@ -51,18 +51,18 @@ export default function SentimentScreenList(props: {
     const secondaryText = isHashtagList ? "with this hashtag" : "from this user";
 
     const [followersDialogIsShown, setFollowersDialogIsShown] = React.useState<boolean>(false);
-    const [userIdForFollowersDialog, setUserIdForFollowersDialog] =
-        React.useState<SentimentScreenListItem>(props.listToShow[1]);
+    const [userNameForFollowersDialog, setUserNameForFollowersDialog] = React.useState<string>("");
 
     const [userInformation, setUserInformation] = React.useState<User>()
     const [userInformationLoading, setUserInformationLoading] = React.useState<boolean>(false);
     const [userFollowers, setUserFollowers] = React.useState<User[]>([]);
     const [userFollowersLoading, setUserFollowersLoading] = React.useState<boolean>(false);
 
-    const openFollowersDialog = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, value: SentimentScreenListItem) => {
-        setUserIdForFollowersDialog(value);
+    const openFollowersDialog = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+                                       value: SentimentScreenListItem) => {
         setUserInformationLoading(true);
         setFollowersDialogIsShown(true);
+        setUserNameForFollowersDialog(value.name);
 
         await client.GetUserInformation(value.id,
             (clientErrorMessage: string,
@@ -120,7 +120,7 @@ export default function SentimentScreenList(props: {
             </List>
             <FollowersDialog openDialog={followersDialogIsShown}
                              setOpenDialog={setFollowersDialogIsShown}
-                             user={userIdForFollowersDialog}
+                             userName={userNameForFollowersDialog}
                              userFollowers={userFollowers}
                              userFollowersLoading={userFollowersLoading}
                              userInformation={userInformation}

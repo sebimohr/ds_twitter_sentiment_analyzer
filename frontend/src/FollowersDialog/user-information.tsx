@@ -13,8 +13,8 @@ export default function UserInformation(props: {
             <Stack direction="row">
                 {user.profile_image_url.length > 0 && <Avatar alt="profile-pic" src={user.profile_image_url}/>}
                 <Stack spacing={2}>
-                    <Typography variant="h4">{user.name}</Typography>
-                    <Typography variant="h5">@{user.username}</Typography>
+                    <Typography component="span" variant="h4">{user.name}</Typography>
+                    <Typography component="span" variant="h5">@{user.username}</Typography>
                 </Stack>
             </Stack>
             <Stack direction="row" spacing={1}>
@@ -23,7 +23,7 @@ export default function UserInformation(props: {
                 <Chip label={"Tweets: " + user.metrics.tweet_count}/>
                 {user.metrics.verified && <Chip icon={<VerifiedIcon/>} label="verified"/>}
             </Stack>
-            <Typography variant="body1">user.description</Typography>
+            <Typography component="span" variant="body1">{user.description}</Typography>
         </Stack>
     )
 }

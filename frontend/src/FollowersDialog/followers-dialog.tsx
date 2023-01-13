@@ -2,14 +2,13 @@ import { Box, Dialog, DialogContent, DialogContentText, DialogTitle, Tab, Tabs, 
 import React from "react";
 import UserInformation from "./user-information";
 import FollowerList from "./follower-list";
-import { SentimentScreenListItem } from "../SentimentScreen/sentiment-screen-list-item";
 import { User } from "../SentimentScreen/user";
 import LoadingBackdrop from "../StartScreen/loading-backdrop";
 
 export default function FollowersDialog(props: {
     openDialog: boolean,
     setOpenDialog: Function,
-    user: SentimentScreenListItem,
+    userName: string,
     userInformation: User | undefined,
     userInformationLoading: boolean,
     userFollowers: User[],
@@ -18,12 +17,7 @@ export default function FollowersDialog(props: {
     const [openDialog, setOpenDialog] = [props.openDialog, props.setOpenDialog];
     const [tabNumber, setTabNumber] = React.useState<number>(0);
 
-    const user = props.user;
-    const [userName, setUserName] = React.useState<string>("");
-
-    if (user !== undefined) {
-        setUserName(user.name);
-    }
+    const userName = props.userName;
 
     const [userInformation, userInformationLoading] = [props.userInformation, props.userInformationLoading];
     const [userFollowers, userFollowersLoading] = [props.userFollowers, props.userFollowersLoading];
@@ -36,7 +30,6 @@ export default function FollowersDialog(props: {
         setTabNumber(newTabNumber);
     }
 
-    // TODO: dialog is not showing at all, instead it removes everything else on the screen
     return (
         <div>
             <Dialog open={openDialog} onClose={handleCloseDialog} scroll="paper">
