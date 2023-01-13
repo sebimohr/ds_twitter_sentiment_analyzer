@@ -5,11 +5,12 @@ import ThemeHelper from "./Infrastructure/theme-helper";
 import SentimentScreen from "./SentimentScreen/sentiment-screen";
 import LoadingBackdrop from "./StartScreen/loading-backdrop";
 import MessageSnackbar from "./StartScreen/message-snackbar";
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Tweet } from "./SentimentScreen/tweet";
 import { SnackbarSeverity } from "./Infrastructure/snackbar-severity";
 import { AxiosClient } from "./Client/axios-client";
 import { SentimentScreenListItem } from "./SentimentScreen/sentiment-screen-list-item";
+import NavigationBar from "./Infrastructure/navigation-bar";
 
 const client = new AxiosClient();
 
@@ -29,6 +30,17 @@ export default function App() {
     const [topHashtagsList, setTopHashtagsList] = React.useState<SentimentScreenListItem[]>([]);
     const [topUsersList, setTopUsersList] = React.useState<SentimentScreenListItem[]>([]);
     const [sentimentScreenIsShown, setSentimentScreenIsShown] = React.useState<boolean>(false);
+
+    const [showBackButton, setShowBackButton] = React.useState<boolean>(false);
+
+    const backButtonPressed = () => {
+        setShowBackButton(false);
+        setHashtagScreenIsShown(true);
+        setSentimentScreenIsShown(false);
+        setTweetList([]);
+        setTopHashtagsList([])
+        setTopUsersList([])
+    }
 
     const showSnackbar = (message: string, severity: SnackbarSeverity, logMessage: string) => {
         setSnackbarIsShown(true);
@@ -54,6 +66,7 @@ export default function App() {
                 setLoadingScreenIsShown(false);
                 setHashtagScreenIsShown(false);
                 setSentimentScreenIsShown(true);
+                setShowBackButton(true);
                 await requestTopHashtagsAndUsers()
             });
     }
@@ -74,15 +87,10 @@ export default function App() {
     return (
         <div className="App">
             <ThemeHelper>
-                <Stack>
-                    {/*<NavigationBar/>*/}
-                    <Typography variant="h3"
-                                sx={{
-                                    marginTop: 4,
-                                    marginBottom: 4
-                                }}>
-                        Twitter Sentiment Analyzer
-                    </Typography>
+                <Stack spacing={2}>
+                    <NavigationBar
+                        showBackButton={showBackButton}
+                        backButtonFunction={backButtonPressed}/>
                     <div>
                         <ChooseEventHashtag
                             hashtag={hashtag}

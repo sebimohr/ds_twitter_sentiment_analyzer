@@ -45,7 +45,7 @@ export default function FollowersDialog(props: {
             <Dialog open={openDialog} onClose={handleCloseDialog} scroll="paper">
                 <DialogTitle>{userName}s Twitter Profile</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
+                    <DialogContentText sx={{mb: 2}}>
                         Here you can see the profile information and followers of {userName}.
                     </DialogContentText>
                     {userInformationLoading &&
