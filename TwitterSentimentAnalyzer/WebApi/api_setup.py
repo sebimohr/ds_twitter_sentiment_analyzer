@@ -24,9 +24,9 @@ class ApiSetup:
     def RegisterApiEndpoints(self):
         """ registers all api endpoints """
         self.api.add_resource(GetSentimentAnalysisEndpoint, '/api/sentiment')
-        self.api.add_resource(GetFollowersEndpoint, '/api/followers')
         self.api.add_resource(GetTopHashtagsAndUsersEndpoint, '/api/top')
         self.api.add_resource(GetUserInformationEndpoint, '/api/user')
+        self.api.add_resource(GetFollowersEndpoint, '/api/user/followers')
         self.api.add_resource(GetUserTweetsEndpoint, '/api/user/tweets')
         return self
 

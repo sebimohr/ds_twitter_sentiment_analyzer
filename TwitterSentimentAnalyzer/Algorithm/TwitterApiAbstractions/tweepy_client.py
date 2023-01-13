@@ -70,7 +70,6 @@ def ValidateUserId(user_id: str) -> str:
     validator = StringValidator(user_id)
     user_id = validator.StringShouldNotBeEmpty() \
         .StringMustNotIncludeWhitespace() \
-        .StringMustBeLongerThan(15) \
         .Value()
 
     return user_id

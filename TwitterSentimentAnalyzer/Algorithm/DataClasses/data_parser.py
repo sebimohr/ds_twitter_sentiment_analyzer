@@ -42,6 +42,7 @@ class DataParser:
 
     def ParseUsersFromApiToUsersDataClassList(self, user) -> [User]:
         user_list: [User] = []
+        # TODO: user.data can be empty -> don't iterate then
         for account in user.data:
             if not account.protected:
                 user_list.append(self.ParseUserFromApiToUserDataClass(account))

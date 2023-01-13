@@ -34,6 +34,9 @@ class TopHashtagsAndUsersAnalyzer:
         ListSorter(user_list)
         ListSorter(hashtag_list)
 
+        if len(user_list) > 15:
+            user_list = user_list[:15]
+
         return user_list, hashtag_list
 
 

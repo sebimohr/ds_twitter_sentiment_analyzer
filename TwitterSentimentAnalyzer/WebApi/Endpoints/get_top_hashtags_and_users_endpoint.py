@@ -35,7 +35,7 @@ class GetTopHashtagsAndUsersEndpoint(Resource):
         user_list, hashtag_list = TopHashtagsAndUsersAnalyzer(tweets, hashtag).AnalyzeTweetList()
 
         not_found_users = []
-        for user in user_list[:15]:
+        for user in user_list:
             user.id = user.name
             user.name = GetUsername(self.tweepy_client, user.id)
             if not (len(user.name) > 0):
