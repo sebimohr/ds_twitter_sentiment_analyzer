@@ -46,7 +46,8 @@ export default function App() {
         setSnackbarIsShown(true);
         setSnackbarMessage(message);
         setSnackbarSeverity(severity);
-        console.log(logMessage);
+        if (logMessage.length > 0)
+            console.log(logMessage);
     }
 
     const hashtagScreenSubmission = async () => {

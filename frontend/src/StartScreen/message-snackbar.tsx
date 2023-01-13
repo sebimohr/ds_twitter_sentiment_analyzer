@@ -38,7 +38,7 @@ export default function MessageSnackbar(props: {
         <div>
             <Snackbar
                 open={props.openErrorSnackbar}
-                autoHideDuration={6000}
+                autoHideDuration={3000}
                 onClose={handleClose}
                 sx={{width: '100%'}}
                 anchorOrigin={{

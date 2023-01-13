@@ -46,6 +46,7 @@ export default function SentimentScreenList(props: {
     listToShow: SentimentScreenListItem[]
     showSkeleton: boolean
     showSnackbar: Function
+    hashtag: string
 }) {
     const isHashtagList = props.isHashtagList;
     const secondaryText = isHashtagList ? "with this hashtag" : "from this user";
@@ -74,7 +75,7 @@ export default function SentimentScreenList(props: {
         changeFollowersDialogIsShown(true);
         setUserNameForFollowersDialog(value.name);
 
-        await client.GetUserInformation(value.id,
+        await client.GetUserInformation(value.id, props.hashtag,
             (clientErrorMessage: string,
              severity: SnackbarSeverity,
              logMessage: string) => {
@@ -85,7 +86,10 @@ export default function SentimentScreenList(props: {
                 setUserInformation(user);
                 setUserInformationLoading(false);
                 setUserFollowersLoading(true);
-                await requestUserFollowers(value.id);
+                if (user.metrics.followers_count > 0)
+                    await requestUserFollowers(value.id);
+                else
+                    props.showSnackbar("User has no followers", SnackbarSeverity.Info, "");
             });
     }
 

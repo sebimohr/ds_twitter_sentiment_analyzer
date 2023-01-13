@@ -1,3 +1,5 @@
+import { Tweet } from "./tweet";
+
 export interface User {
     id: string
     name: string
@@ -5,6 +7,7 @@ export interface User {
     description: string
     profile_image_url: string
     metrics: UserMetrics
+    tweets: Tweet[]
 }
 
 interface UserMetrics {

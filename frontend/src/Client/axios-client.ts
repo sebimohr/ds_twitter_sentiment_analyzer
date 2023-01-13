@@ -85,11 +85,13 @@ export class AxiosClient {
     }
 
     async GetUserInformation(user_id: string,
+                             hashtag: string,
                              responseFailure: Function,
                              responseSuccess: Function) {
         await axios.get(this.backendApiUrl + '/api/user', {
             params: {
                 user_id: user_id,
+                hashtag: hashtag
             },
             validateStatus: function (status) {
                 return status <= 404;

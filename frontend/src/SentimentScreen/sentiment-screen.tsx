@@ -49,12 +49,14 @@ export default function SentimentScreen(props: SentimentProps) {
                         isHashtagList={true}
                         listToShow={props.topHashtagsList}
                         showSkeleton={!(props.topHashtagsList.length > 0)}
-                        showSnackbar={props.showSnackbar}/>
+                        showSnackbar={props.showSnackbar}
+                        hashtag={hashtag}/>
                     <SentimentScreenList
                         isHashtagList={false}
                         listToShow={props.topUsersList}
                         showSkeleton={!(props.topUsersList.length > 0)}
-                        showSnackbar={props.showSnackbar}/>
+                        showSnackbar={props.showSnackbar}
+                        hashtag={hashtag}/>
                 </Stack>
             </Stack>}
         </div>
