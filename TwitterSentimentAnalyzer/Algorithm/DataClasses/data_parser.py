@@ -13,7 +13,7 @@ class DataParser:
             tweet_metrics: TweetMetrics
             if tweet.public_metrics is not None:
                 tweet_metrics = TweetMetrics(
-                        tweet.author_id,
+                        str(tweet.author_id),
                         tweet.created_at,
                         tweet.public_metrics["retweet_count"],
                         tweet.public_metrics["reply_count"],
@@ -22,14 +22,14 @@ class DataParser:
                 )
             else:
                 tweet_metrics = TweetMetrics(
-                        tweet.author_id,
+                        str(tweet.author_id),
                         tweet.created_at,
                         0, 0, 0, 0
                 )
 
             tweet_list.append(
                     Tweet(
-                            tweet.id,
+                            str(tweet.id),
                             tweet.text,
                             tweet_metrics,
                             TweetSentiment(
@@ -42,10 +42,10 @@ class DataParser:
 
     def ParseUsersFromApiToUsersDataClassList(self, user) -> [User]:
         user_list: [User] = []
-        # TODO: user.data can be empty -> don't iterate then
-        for account in user.data:
-            if not account.protected:
-                user_list.append(self.ParseUserFromApiToUserDataClass(account))
+        if len(user) > 0:
+            for account in user.data:
+                if not account.protected:
+                    user_list.append(self.ParseUserFromApiToUserDataClass(account))
 
         return user_list
 
@@ -68,7 +68,7 @@ class DataParser:
             )
 
         return User(
-                user.id,
+                str(user.id),
                 user.name,
                 user.username,
                 user.description,

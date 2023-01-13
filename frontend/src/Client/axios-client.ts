@@ -2,6 +2,7 @@ import axios from "axios";
 import { SnackbarSeverity } from "../Infrastructure/snackbar-severity";
 import { Tweet } from "../SentimentScreen/tweet";
 import { SentimentScreenListItem } from "../SentimentScreen/sentiment-screen-list-item";
+import { User } from "../SentimentScreen/user";
 
 const backendApiUrl = "http://127.0.0.1:9001";
 
@@ -98,7 +99,7 @@ export class AxiosClient {
                 if (!CheckIfStatusCodeIsOK(response.status, responseFailure, null))
                     return;
 
-                let user = response.data.user;
+                let user = response.data.user as User;
                 if (user != null) {
                     responseSuccess(user)
                 } else {
@@ -128,8 +129,8 @@ export class AxiosClient {
                 if (!CheckIfStatusCodeIsOK(response.status, responseFailure, null))
                     return;
 
-                let users = response.data.users;
-                if (users.length < 1) {
+                let users = response.data.users as User[];
+                if (users.length > 0) {
                     responseSuccess(users)
                 } else {
                     responseFailure(
@@ -158,8 +159,8 @@ export class AxiosClient {
                 if (!CheckIfStatusCodeIsOK(response.status, responseFailure, null))
                     return;
 
-                let tweets = response.data.tweets;
-                if (tweets.length < 1) {
+                let tweets = response.data.tweets as Tweet[];
+                if (tweets.length > 0) {
                     responseSuccess(tweets)
                 } else {
                     responseFailure(

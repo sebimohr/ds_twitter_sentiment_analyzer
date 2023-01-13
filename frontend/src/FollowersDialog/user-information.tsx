@@ -10,9 +10,9 @@ export default function UserInformation(props: {
 
     return (
         <Stack sx={{width: '100%'}} spacing={4}>
-            <Stack direction="row">
-                {user.profile_image_url !== undefined && <Avatar alt="profile-pic" src={user.profile_image_url}/>}
-                <Stack spacing={2}>
+            <Stack direction="row" spacing={2}>
+                {user.profile_image_url !== undefined && <Avatar alt="profile-pic" src={user.profile_image_url} sx={{height:96, width:96}}/>}
+                <Stack spacing={1}>
                     <Typography component="span" variant="h4">{user.name}</Typography>
                     <Typography component="span" variant="h5">@{user.username}</Typography>
                 </Stack>

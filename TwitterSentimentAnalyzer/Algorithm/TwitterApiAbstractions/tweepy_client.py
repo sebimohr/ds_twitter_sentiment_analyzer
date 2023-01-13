@@ -55,7 +55,7 @@ class TweepyClient:
 
         return DataParser.ParseUserFromApiToUserDataClass(user.data)
 
-    def GetTweetsFromUserId(self, user_id: str) -> User:
+    def GetTweetsFromUserId(self, user_id: str) -> [Tweet]:
         """ load tweets from a user by their user_id """
         user_id = ValidateUserId(user_id)
 

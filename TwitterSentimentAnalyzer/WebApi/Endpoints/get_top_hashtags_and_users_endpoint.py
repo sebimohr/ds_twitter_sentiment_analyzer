@@ -36,7 +36,7 @@ class GetTopHashtagsAndUsersEndpoint(Resource):
 
         not_found_users = []
         for user in user_list:
-            user.id = user.name
+            user.id = str(user.name)
             user.name = GetUsername(self.tweepy_client, user.id)
             if not (len(user.name) > 0):
                 not_found_users.append(user)

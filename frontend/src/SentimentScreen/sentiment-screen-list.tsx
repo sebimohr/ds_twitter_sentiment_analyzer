@@ -85,7 +85,6 @@ export default function SentimentScreenList(props: {
                 setUserInformation(user);
                 setUserInformationLoading(false);
                 setUserFollowersLoading(true);
-                // TODO: test requestFollowers endpoint in api
                 await requestUserFollowers(value.id);
             });
     }
