@@ -62,6 +62,7 @@ export default function ChooseEventHashtag(props: HashtagProps) {
     }
 
     const tweetCountSlider = <Slider
+        key={`slider-${tweetCount}`}
         aria-label="tweet_count"
         defaultValue={tweetCount}
         onChange={handleTweetCountChanged}

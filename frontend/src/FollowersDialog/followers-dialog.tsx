@@ -1,9 +1,18 @@
-import { Box, Dialog, DialogContent, DialogContentText, DialogTitle, Tab, Tabs, Typography } from "@mui/material";
+import {
+    Box,
+    CircularProgress,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle, Stack,
+    Tab,
+    Tabs,
+    Typography
+} from "@mui/material";
 import React from "react";
 import UserInformation from "./user-information";
 import FollowerList from "./follower-list";
 import { User } from "../SentimentScreen/user";
-import LoadingBackdrop from "../StartScreen/loading-backdrop";
 
 export default function FollowersDialog(props: {
     openDialog: boolean,
@@ -24,6 +33,7 @@ export default function FollowersDialog(props: {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setTabNumber(0);
     }
 
     const handleTabChange = (event: React.SyntheticEvent, newTabNumber: number) => {
@@ -38,13 +48,19 @@ export default function FollowersDialog(props: {
                     <DialogContentText>
                         Here you can see the profile information and followers of {userName}.
                     </DialogContentText>
-                    {userInformationLoading && <Box sx={{height: 200}}>
-                        <LoadingBackdrop showDialog={userInformationLoading}/>
-                    </Box>}
+                    {userInformationLoading &&
+                        <Stack direction="row"
+                               alignItems="center"
+                               justifyContent="center"
+                               sx={{width: '100%', height: 300}}>
+                            <CircularProgress/>
+                        </Stack>}
                     {!userInformationLoading &&
                         <Box>
                             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                                <Tabs value={tabNumber} onChange={handleTabChange} aria-label="community-tabs"
+                                <Tabs value={tabNumber}
+                                      onChange={handleTabChange}
+                                      aria-label="community-tabs"
                                       variant="fullWidth">
                                     <Tab label="User Information" {...allyProps(0)}/>
                                     <Tab label="Followers" {...allyProps(1)} disabled={userFollowersLoading}/>

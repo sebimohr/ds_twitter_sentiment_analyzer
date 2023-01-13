@@ -1,7 +1,8 @@
 import CanvasJSReact from "../CanvasJsLibrary/canvasjs.react";
 
 const percentage = (count: number, total_count: number): string => {
-    let percentageOfAllTweets = count * 100 / total_count;
+    // round percentage to the first decimal after comma
+    let percentageOfAllTweets = Math.round(count * 1000 / total_count) / 10;
     return percentageOfAllTweets.toString();
 }
 

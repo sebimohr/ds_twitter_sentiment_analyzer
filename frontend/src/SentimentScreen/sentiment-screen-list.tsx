@@ -53,15 +53,25 @@ export default function SentimentScreenList(props: {
     const [followersDialogIsShown, setFollowersDialogIsShown] = React.useState<boolean>(false);
     const [userNameForFollowersDialog, setUserNameForFollowersDialog] = React.useState<string>("");
 
-    const [userInformation, setUserInformation] = React.useState<User>()
+    const [userInformation, setUserInformation] = React.useState<User>({} as User)
     const [userInformationLoading, setUserInformationLoading] = React.useState<boolean>(false);
     const [userFollowers, setUserFollowers] = React.useState<User[]>([]);
     const [userFollowersLoading, setUserFollowersLoading] = React.useState<boolean>(false);
 
+    const changeFollowersDialogIsShown = (isShown: boolean) => {
+        setFollowersDialogIsShown(isShown);
+
+        // when closing the dialog, all the data that gets displayed in the dialog is removed
+        if (!isShown) {
+            setUserNameForFollowersDialog("");
+            setUserFollowers([]);
+        }
+    }
+
     const openFollowersDialog = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>,
                                        value: SentimentScreenListItem) => {
         setUserInformationLoading(true);
-        setFollowersDialogIsShown(true);
+        changeFollowersDialogIsShown(true);
         setUserNameForFollowersDialog(value.name);
 
         await client.GetUserInformation(value.id,
@@ -69,14 +79,14 @@ export default function SentimentScreenList(props: {
              severity: SnackbarSeverity,
              logMessage: string) => {
                 props.showSnackbar(clientErrorMessage, severity, logMessage);
-                setFollowersDialogIsShown(false);
+                changeFollowersDialogIsShown(false);
             },
             async (user: User) => {
                 setUserInformation(user);
                 setUserInformationLoading(false);
                 setUserFollowersLoading(true);
                 // TODO: test requestFollowers endpoint in api
-                // await requestUserFollowers(value.id);
+                await requestUserFollowers(value.id);
             });
     }
 
@@ -119,7 +129,7 @@ export default function SentimentScreenList(props: {
                     listItems}
             </List>
             <FollowersDialog openDialog={followersDialogIsShown}
-                             setOpenDialog={setFollowersDialogIsShown}
+                             setOpenDialog={changeFollowersDialogIsShown}
                              userName={userNameForFollowersDialog}
                              userFollowers={userFollowers}
                              userFollowersLoading={userFollowersLoading}
