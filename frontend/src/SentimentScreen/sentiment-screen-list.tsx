@@ -7,6 +7,8 @@ import UserInformationDialog from "../FollowersDialog/user-information-dialog";
 import { User } from "./user";
 import { AxiosClient } from "../Client/axios-client";
 import { SnackbarSeverity } from "../Infrastructure/snackbar-severity";
+import ShowTweetsDialog from "../FollowersDialog/show-tweets-dialog";
+import { Tweet } from "./tweet";
 
 const determineListItemColor = (sentiment: number): string => {
     if (sentiment > 0.5) {
@@ -54,10 +56,15 @@ export default function SentimentScreenList(props: {
     const [followersDialogIsShown, setFollowersDialogIsShown] = React.useState<boolean>(false);
     const [userNameForFollowersDialog, setUserNameForFollowersDialog] = React.useState<string>("");
 
-    const [userInformation, setUserInformation] = React.useState<User>({} as User)
+    const [userInformation, setUserInformation] = React.useState<User>({} as User);
     const [userInformationLoading, setUserInformationLoading] = React.useState<boolean>(false);
     const [userFollowers, setUserFollowers] = React.useState<User[]>([]);
     const [userFollowersLoading, setUserFollowersLoading] = React.useState<boolean>(false);
+
+    const [showHashtagDialog, setShowHashtagDialog] = React.useState<boolean>(false);
+    const [hashtagDialogTweetsLoading, setHashtagDialogTweetsLoading] = React.useState<boolean>(false);
+    const [hashtagTweets, setHashtagTweets] = React.useState<Tweet[]>([]);
+    const [clickedHashtag, setClickedHashtag] = React.useState<string>("");
 
     const changeFollowersDialogIsShown = (isShown: boolean) => {
         setFollowersDialogIsShown(isShown);
@@ -69,28 +76,55 @@ export default function SentimentScreenList(props: {
         }
     }
 
-    const openFollowersDialog = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-                                       value: SentimentScreenListItem) => {
-        setUserInformationLoading(true);
-        changeFollowersDialogIsShown(true);
-        setUserNameForFollowersDialog(value.name);
+    const openDialog = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+                              value: SentimentScreenListItem) => {
+        if (isHashtagList) {
+            setShowHashtagDialog(true);
+            setHashtagDialogTweetsLoading(true);
+            setClickedHashtag(value.name);
 
-        await client.GetUserInformation(value.id, props.hashtag,
-            (clientErrorMessage: string,
-             severity: SnackbarSeverity,
-             logMessage: string) => {
-                props.showSnackbar(clientErrorMessage, severity, logMessage);
-                changeFollowersDialogIsShown(false);
-            },
-            async (user: User) => {
-                setUserInformation(user);
-                setUserInformationLoading(false);
-                setUserFollowersLoading(true);
-                if (user.metrics.followers_count > 0)
-                    await requestUserFollowers(value.id);
-                else
-                    props.showSnackbar("User has no followers", SnackbarSeverity.Info, "");
-            });
+            await client.GetHashtagTweets(props.hashtag,
+                value.name,
+                (clientErrorMessage: string,
+                 severity: SnackbarSeverity,
+                 logMessage: string) => {
+                    props.showSnackbar(clientErrorMessage, severity, logMessage);
+                    changeFollowersDialogIsShown(false);
+                },
+                (tweets: Tweet[]) => {
+                    setHashtagTweets(tweets);
+                    setHashtagDialogTweetsLoading(false);
+                    if (!(tweets.length > 0)) {
+                        props.showSnackbar(
+                            "Something went wrong, please try again or inform your system administrator.",
+                            SnackbarSeverity.Warning,
+                            "Tweet with top hashtag couldn't be retrieved");
+                    }
+                });
+        } else {
+            setUserInformationLoading(true);
+            changeFollowersDialogIsShown(true);
+            setUserNameForFollowersDialog(value.name);
+
+            await client.GetUserInformation(value.id, props.hashtag,
+                (clientErrorMessage: string,
+                 severity: SnackbarSeverity,
+                 logMessage: string) => {
+                    props.showSnackbar(clientErrorMessage, severity, logMessage);
+                    changeFollowersDialogIsShown(false);
+                },
+                async (user: User) => {
+                    setUserInformation(user);
+                    setUserInformationLoading(false);
+                    setUserFollowersLoading(true);
+                    if (user.metrics.followers_count > 0)
+                        await requestUserFollowers(value.id);
+                    else {
+                        props.showSnackbar("User has no followers", SnackbarSeverity.Info, "");
+                        setUserFollowersLoading(false);
+                    }
+                });
+        }
     }
 
     const requestUserFollowers = async (user_id: string) => {
@@ -111,7 +145,7 @@ export default function SentimentScreenList(props: {
                     bgcolor: determineListItemColor(value.sentiment),
                     borderRadius: 2
                 }}
-                onClick={(event) => !isHashtagList && openFollowersDialog(event, value)}>
+                onClick={(event) => openDialog(event, value)}>
                 <ListItemIcon>{isHashtagList ? <TagIcon/> : <PersonIcon/>}</ListItemIcon>
                 <ListItemText
                     primary={value.name}
@@ -139,6 +173,11 @@ export default function SentimentScreenList(props: {
                                    userInformation={userInformation}
                                    userInformationLoading={userInformationLoading}
                                    showSnackbar={props.showSnackbar}/>
+            <ShowTweetsDialog dialogIsShown={showHashtagDialog}
+                              setDialogIsShown={setShowHashtagDialog}
+                              tweetsLoading={hashtagDialogTweetsLoading}
+                              tweets={hashtagTweets}
+                              dialogTitle={`Tweets with #${clickedHashtag}`}/>
         </Stack>
     )
 }

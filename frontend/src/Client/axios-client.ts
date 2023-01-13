@@ -132,14 +132,7 @@ export class AxiosClient {
                     return;
 
                 let users = response.data.users as User[];
-                if (users.length > 0) {
-                    responseSuccess(users)
-                } else {
-                    responseFailure(
-                        "Couldn't request followers, the user might be private",
-                        SnackbarSeverity.Info,
-                        "Followers list was empty.")
-                }
+                responseSuccess(users)
             })
             .catch(error => {
                 return BasicRequestFailure(responseFailure, error);
@@ -162,14 +155,32 @@ export class AxiosClient {
                     return;
 
                 let tweets = response.data.tweets as Tweet[];
-                if (tweets.length > 0) {
-                    responseSuccess(tweets)
-                } else {
-                    responseFailure(
-                        "Couldn't request tweets of the user, they might be private",
-                        SnackbarSeverity.Info,
-                        "Users tweets list was empty.")
-                }
+                responseSuccess(tweets)
+            })
+            .catch(error => {
+                return BasicRequestFailure(responseFailure, error);
+            });
+    }
+
+    async GetHashtagTweets(main_hashtag: string,
+                           search_hashtag: string,
+                           responseFailure: Function,
+                           responseSuccess: Function) {
+        await axios.get(this.backendApiUrl + '/api/hashtag', {
+            params: {
+                hashtag: main_hashtag,
+                search_tag: search_hashtag
+            },
+            validateStatus: function (status) {
+                return status <= 404;
+            }
+        })
+            .then(response => {
+                if (!CheckIfStatusCodeIsOK(response.status, responseFailure, null))
+                    return;
+
+                let tweets = response.data.tweets as Tweet[];
+                responseSuccess(tweets)
             })
             .catch(error => {
                 return BasicRequestFailure(responseFailure, error);

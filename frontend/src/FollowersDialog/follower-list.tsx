@@ -5,6 +5,7 @@ import { AxiosClient } from "../Client/axios-client";
 import { SnackbarSeverity } from "../Infrastructure/snackbar-severity";
 import { Tweet } from "../SentimentScreen/tweet";
 import React from "react";
+import NoContent from "./no-content";
 
 const client = new AxiosClient();
 
@@ -38,7 +39,9 @@ export default function FollowerList(props: {
             (tweets: Tweet[]) => {
                 setFollowerTweetsLoading(false);
                 setFollowerTweets(tweets);
-                props.showSnackbar(`${tweets.length} tweets have been retrieved`, SnackbarSeverity.Success, "");
+                if (tweets.length < 0) {
+                    props.showSnackbar("User doesn't have any tweets to show", SnackbarSeverity.Info, "");
+                }
             });
     }
 
@@ -61,7 +64,10 @@ export default function FollowerList(props: {
     return (
         <Stack sx={{width: '100%'}}>
             <List aria-label="followers-list">
-                {listItems}
+                {props.followers.length > 0 ?
+                    listItems :
+                    <NoContent message={"User doesn't have any followers to show"}/>
+                }
             </List>
         </Stack>
     )

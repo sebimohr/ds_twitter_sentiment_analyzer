@@ -1,18 +1,9 @@
-import {
-    Box,
-    Dialog,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Tab,
-    Tabs,
-    Typography
-} from "@mui/material";
+import { Box, Dialog, DialogContent, DialogContentText, DialogTitle, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import UserInformation from "./user-information";
 import FollowerList from "./follower-list";
 import { User } from "../SentimentScreen/user";
-import FollowerTweetsDialog from "./follower-tweets-dialog";
+import ShowTweetsDialog from "./show-tweets-dialog";
 import { Tweet } from "../SentimentScreen/tweet";
 import LoadingScreen from "./loading-screen";
 
@@ -83,11 +74,11 @@ export default function UserInformationDialog(props: {
                         </Box>}
                 </DialogContent>
             </Dialog>
-            <FollowerTweetsDialog dialogIsShown={followerTweetsDialogIsOpen}
-                                  setDialogIsShown={setFollowerTweetsDialogIsOpen}
-                                  tweetsLoading={followerTweetsLoading}
-                                  tweets={followerTweets}
-                                  user={follower}/>
+            <ShowTweetsDialog dialogIsShown={followerTweetsDialogIsOpen}
+                              setDialogIsShown={setFollowerTweetsDialogIsOpen}
+                              tweetsLoading={followerTweetsLoading}
+                              tweets={followerTweets}
+                              dialogTitle={`${follower.name}s recent tweets`}/>
         </div>
     )
 }

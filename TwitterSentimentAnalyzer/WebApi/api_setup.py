@@ -4,6 +4,7 @@ from flask_restful import Api
 
 from WebApi.Endpoints.get_followers_endpoint import GetFollowersEndpoint
 from WebApi.Endpoints.get_top_hashtags_and_users_endpoint import GetTopHashtagsAndUsersEndpoint
+from WebApi.Endpoints.get_tweets_from_cache_with_hashtag import GetTweetsFromCacheWithHashtagEndpoint
 from WebApi.Endpoints.get_user_information_endpoint import GetUserInformationEndpoint
 from WebApi.Endpoints.get_user_tweets_endpoint import GetUserTweetsEndpoint
 from WebApi.Endpoints.sentiment_analysis_endpoint import GetSentimentAnalysisEndpoint
@@ -28,6 +29,7 @@ class ApiSetup:
         self.api.add_resource(GetUserInformationEndpoint, '/api/user')
         self.api.add_resource(GetFollowersEndpoint, '/api/user/followers')
         self.api.add_resource(GetUserTweetsEndpoint, '/api/user/tweets')
+        self.api.add_resource(GetTweetsFromCacheWithHashtagEndpoint, '/api/hashtag')
         return self
 
     def RunApi(self):
