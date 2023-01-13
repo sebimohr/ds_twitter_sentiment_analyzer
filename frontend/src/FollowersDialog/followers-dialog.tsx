@@ -1,12 +1,32 @@
 import { Box, Dialog, DialogContent, DialogContentText, DialogTitle, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
+import UserInformation from "./user-information";
+import FollowerList from "./follower-list";
+import { SentimentScreenListItem } from "../SentimentScreen/sentiment-screen-list-item";
+import { User } from "../SentimentScreen/user";
+import LoadingBackdrop from "../StartScreen/loading-backdrop";
 
 export default function FollowersDialog(props: {
     openDialog: boolean,
-    setOpenDialog: Function
+    setOpenDialog: Function,
+    user: SentimentScreenListItem,
+    userInformation: User | undefined,
+    userInformationLoading: boolean,
+    userFollowers: User[],
+    userFollowersLoading: boolean
 }) {
     const [openDialog, setOpenDialog] = [props.openDialog, props.setOpenDialog];
-    const [tabNumber, setTabNumber] = React.useState<number>(0)
+    const [tabNumber, setTabNumber] = React.useState<number>(0);
+
+    const user = props.user;
+    const [userName, setUserName] = React.useState<string>("");
+
+    if (user !== undefined) {
+        setUserName(user.name);
+    }
+
+    const [userInformation, userInformationLoading] = [props.userInformation, props.userInformationLoading];
+    const [userFollowers, userFollowersLoading] = [props.userFollowers, props.userFollowersLoading];
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
@@ -16,33 +36,34 @@ export default function FollowersDialog(props: {
         setTabNumber(newTabNumber);
     }
 
+    // TODO: dialog is not showing at all, instead it removes everything else on the screen
     return (
         <div>
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>[[Username]]s Community</DialogTitle>
+            <Dialog open={openDialog} onClose={handleCloseDialog} scroll="paper">
+                <DialogTitle>{userName}s Twitter Profile</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Here you can see the followers of [[Username]] and their recent tweets
+                        Here you can see the profile information and followers of {userName}.
                     </DialogContentText>
-                    <Box>
-                        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                            <Tabs value={tabNumber} onChange={handleTabChange} aria-label="community-tabs"
-                                  variant="fullWidth">
-                                <Tab label="User Information" {...allyProps(0)}/>
-                                <Tab label="Followers" {...allyProps(1)}/>
-                                <Tab label="Timeline" {...allyProps(2)}/>
-                            </Tabs>
-                        </Box>
-                        <TabPanel value={tabNumber} index={0}>
-
-                        </TabPanel>
-                        <TabPanel value={tabNumber} index={1}>
-
-                        </TabPanel>
-                        <TabPanel value={tabNumber} index={2}>
-
-                        </TabPanel>
-                    </Box>
+                    {userInformationLoading && <Box sx={{height: 200}}>
+                        <LoadingBackdrop showDialog={userInformationLoading}/>
+                    </Box>}
+                    {!userInformationLoading &&
+                        <Box>
+                            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                                <Tabs value={tabNumber} onChange={handleTabChange} aria-label="community-tabs"
+                                      variant="fullWidth">
+                                    <Tab label="User Information" {...allyProps(0)}/>
+                                    <Tab label="Followers" {...allyProps(1)} disabled={userFollowersLoading}/>
+                                </Tabs>
+                            </Box>
+                            <TabPanel value={tabNumber} index={0}>
+                                {userInformation !== undefined && <UserInformation user={userInformation}/>}
+                            </TabPanel>
+                            <TabPanel value={tabNumber} index={1}>
+                                <FollowerList followers={userFollowers}/>
+                            </TabPanel>
+                        </Box>}
                 </DialogContent>
             </Dialog>
         </div>
@@ -62,8 +83,8 @@ function TabPanel(props: TabPanelProps) {
         <div
             role="tabpanel"
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
+            id={`tabpanel-${index}`}
+            aria-labelledby={`tab-${index}`}
             {...other}
         >
             {value === index && (
@@ -77,7 +98,7 @@ function TabPanel(props: TabPanelProps) {
 
 function allyProps(index: number) {
     return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        id: `tab-${index}`,
+        'aria-controls': `tabpanel-${index}`,
     };
 }

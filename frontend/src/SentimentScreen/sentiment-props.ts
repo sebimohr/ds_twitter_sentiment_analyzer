@@ -8,4 +8,5 @@ export interface SentimentProps {
     tweetsList: Tweet[]
     topHashtagsList: SentimentScreenListItem[]
     topUsersList: SentimentScreenListItem[]
+    showSnackbar: Function
 }

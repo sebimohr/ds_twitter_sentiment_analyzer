@@ -11,8 +11,7 @@ import { SnackbarSeverity } from "./Infrastructure/snackbar-severity";
 import { AxiosClient } from "./Client/axios-client";
 import { SentimentScreenListItem } from "./SentimentScreen/sentiment-screen-list-item";
 
-const backendApiUrl = "http://127.0.0.1:9001";
-const client = new AxiosClient(backendApiUrl);
+const client = new AxiosClient();
 
 export default function App() {
     const [hashtag, setHashtag] = React.useState<string>('');
@@ -100,7 +99,8 @@ export default function App() {
                             changeIsShown={setSentimentScreenIsShown}
                             tweetsList={tweetList}
                             topHashtagsList={topHashtagsList}
-                            topUsersList={topUsersList}/>
+                            topUsersList={topUsersList}
+                            showSnackbar={showSnackbar}/>
                         <LoadingBackdrop
                             showDialog={loadingScreenIsShown}/>
                         <MessageSnackbar
