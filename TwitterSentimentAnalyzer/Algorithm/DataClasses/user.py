@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from Algorithm.DataClasses.tweet import Tweet
 from Algorithm.DataClasses.user_metric import UserMetric
 
 
@@ -11,6 +12,7 @@ class User:
     description: str
     profile_image_url: str
     metrics: UserMetric
+    tweets: [Tweet]
 
     @staticmethod
     def EmptyUserWithId(user_id: str):
@@ -22,5 +24,6 @@ class User:
                 "",
                 UserMetric(
                         0, 0, 0, 0, False
-                )
+                ),
+                []
         )

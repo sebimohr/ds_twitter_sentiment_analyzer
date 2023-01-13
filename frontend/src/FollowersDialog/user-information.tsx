@@ -1,21 +1,16 @@
 import { User } from "../SentimentScreen/user";
-import { Avatar, Chip, List, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Avatar, Chip, List, Stack, Typography } from "@mui/material";
 import React from "react";
 import VerifiedIcon from '@mui/icons-material/Verified';
-import TwitterIcon from '@mui/icons-material/Twitter';
+import TweetItem from "./tweet-item";
 
 export default function UserInformation(props: {
     user: User
 }) {
     const user = props.user;
 
-    const tweetList = user.tweets.map(value =>
-        <ListItem key={value.id}>
-            <ListItemIcon><TwitterIcon/></ListItemIcon>
-            <ListItemText
-                primary={value.content}
-            />
-        </ListItem>
+    const tweetList = user.tweets.map(tweet =>
+        <TweetItem tweet={tweet}/>
     );
 
     return (

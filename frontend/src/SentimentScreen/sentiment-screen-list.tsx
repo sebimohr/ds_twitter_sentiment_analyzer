@@ -3,7 +3,7 @@ import TagIcon from '@mui/icons-material/Tag';
 import PersonIcon from '@mui/icons-material/Person';
 import React from "react";
 import { SentimentScreenListItem } from "./sentiment-screen-list-item";
-import FollowersDialog from "../FollowersDialog/followers-dialog";
+import UserInformationDialog from "../FollowersDialog/user-information-dialog";
 import { User } from "./user";
 import { AxiosClient } from "../Client/axios-client";
 import { SnackbarSeverity } from "../Infrastructure/snackbar-severity";
@@ -131,13 +131,14 @@ export default function SentimentScreenList(props: {
                     listSkeleton :
                     listItems}
             </List>
-            <FollowersDialog openDialog={followersDialogIsShown}
-                             setOpenDialog={changeFollowersDialogIsShown}
-                             userName={userNameForFollowersDialog}
-                             userFollowers={userFollowers}
-                             userFollowersLoading={userFollowersLoading}
-                             userInformation={userInformation}
-                             userInformationLoading={userInformationLoading}/>
+            <UserInformationDialog openDialog={followersDialogIsShown}
+                                   setOpenDialog={changeFollowersDialogIsShown}
+                                   userName={userNameForFollowersDialog}
+                                   userFollowers={userFollowers}
+                                   userFollowersLoading={userFollowersLoading}
+                                   userInformation={userInformation}
+                                   userInformationLoading={userInformationLoading}
+                                   showSnackbar={props.showSnackbar}/>
         </Stack>
     )
 }

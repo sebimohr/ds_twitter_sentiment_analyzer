@@ -1,10 +1,9 @@
 import {
     Box,
-    CircularProgress,
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogTitle, Stack,
+    DialogTitle,
     Tab,
     Tabs,
     Typography
@@ -13,15 +12,19 @@ import React from "react";
 import UserInformation from "./user-information";
 import FollowerList from "./follower-list";
 import { User } from "../SentimentScreen/user";
+import FollowerTweetsDialog from "./follower-tweets-dialog";
+import { Tweet } from "../SentimentScreen/tweet";
+import LoadingScreen from "./loading-screen";
 
-export default function FollowersDialog(props: {
+export default function UserInformationDialog(props: {
     openDialog: boolean,
     setOpenDialog: Function,
     userName: string,
     userInformation: User | undefined,
     userInformationLoading: boolean,
     userFollowers: User[],
-    userFollowersLoading: boolean
+    userFollowersLoading: boolean,
+    showSnackbar: Function
 }) {
     const [openDialog, setOpenDialog] = [props.openDialog, props.setOpenDialog];
     const [tabNumber, setTabNumber] = React.useState<number>(0);
@@ -30,6 +33,11 @@ export default function FollowersDialog(props: {
 
     const [userInformation, userInformationLoading] = [props.userInformation, props.userInformationLoading];
     const [userFollowers, userFollowersLoading] = [props.userFollowers, props.userFollowersLoading];
+
+    const [follower, setFollower] = React.useState<User>({} as User);
+    const [followerTweetsLoading, setFollowerTweetsLoading] = React.useState<boolean>(false);
+    const [followerTweetsDialogIsOpen, setFollowerTweetsDialogIsOpen] = React.useState<boolean>(false);
+    const [followerTweets, setFollowerTweets] = React.useState<Tweet[]>([]);
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
@@ -48,14 +56,8 @@ export default function FollowersDialog(props: {
                     <DialogContentText sx={{mb: 2}}>
                         Here you can see the profile information and followers of {userName}.
                     </DialogContentText>
-                    {userInformationLoading &&
-                        <Stack direction="row"
-                               alignItems="center"
-                               justifyContent="center"
-                               sx={{width: '100%', height: 300}}>
-                            <CircularProgress/>
-                        </Stack>}
-                    {!userInformationLoading &&
+                    {userInformationLoading ?
+                        <LoadingScreen/> :
                         <Box>
                             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                                 <Tabs value={tabNumber}
@@ -70,11 +72,22 @@ export default function FollowersDialog(props: {
                                 {userInformation !== undefined && <UserInformation user={userInformation}/>}
                             </TabPanel>
                             <TabPanel value={tabNumber} index={1}>
-                                <FollowerList followers={userFollowers}/>
+                                <FollowerList
+                                    followers={userFollowers}
+                                    showSnackbar={props.showSnackbar}
+                                    setFollower={setFollower}
+                                    setFollowerTweetsLoading={setFollowerTweetsLoading}
+                                    setFollowerTweetsDialogIsOpen={setFollowerTweetsDialogIsOpen}
+                                    setFollowerTweets={setFollowerTweets}/>
                             </TabPanel>
                         </Box>}
                 </DialogContent>
             </Dialog>
+            <FollowerTweetsDialog dialogIsShown={followerTweetsDialogIsOpen}
+                                  setDialogIsShown={setFollowerTweetsDialogIsOpen}
+                                  tweetsLoading={followerTweetsLoading}
+                                  tweets={followerTweets}
+                                  user={follower}/>
         </div>
     )
 }
@@ -98,7 +111,7 @@ function TabPanel(props: TabPanelProps) {
         >
             {value === index && (
                 <Box sx={{p: 3}}>
-                    <Typography component="span" >{children}</Typography>
+                    <Typography component="span">{children}</Typography>
                 </Box>
             )}
         </div>

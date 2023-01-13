@@ -70,7 +70,7 @@ export class AxiosClient {
 
                 let top_hashtags = response.data.hashtags as SentimentScreenListItem[];
                 let top_users = response.data.users as SentimentScreenListItem[];
-                if (top_hashtags.length > 0 && top_users.length > 0) {
+                if (top_hashtags.length > 0 || top_users.length > 0) {
                     responseSuccess(top_hashtags, top_users)
                 } else {
                     responseFailure(
