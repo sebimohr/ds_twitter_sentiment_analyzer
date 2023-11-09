@@ -1,0 +1,32 @@
+% Formatierung
+\usepackage[left=3cm, right=3cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{polyglossia}
+\usepackage{csquotes}
+
+\usepackage[headsepline]{scrlayer-scrpage}
+
+% code listings
+\usepackage{listings}
+\renewcommand\lstlistingname{Quellcode}
+
+% to include pdfpages in latex document
+\usepackage{pdfpages}
+
+% to enforce figure placement with [H]
+\usepackage{float}
+
+% Commands
+\newcommand{\code}[1]{\texttt{#1}} % Code formatting in text
+\newcommand{\requirement}[1]{\textbf{#1}}
+
+\pagestyle{scrheadings}
+\automark[chapter]{chapter}
+
+% headline
+\author{Sebastian Mohr (\textsf{sebastian.mohr@st.oth-regensburg.de})}
+\date{25.11.2022}
+\title{Twitter Data Analysis}
+\subtitle{Applied Data Science in Python - Project Description}

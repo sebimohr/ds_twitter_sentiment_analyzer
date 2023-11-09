@@ -1,8 +1,6 @@
 # Project-only irgnored files
 /TwitterSentimentAnalyzer/Cache
-
-
-
+/ProjectDescription/4_Milestone
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
